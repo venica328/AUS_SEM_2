@@ -21,8 +21,15 @@ namespace structures
 	template<typename K, typename T>
 	inline void InsertSort<K, T>::sort(UnsortedSequenceTable<K, T>& table)
 	{
-		//TODO 12: InsertSort
-		throw std::exception("InsertSort<K, T>::sort: Not implemented yet.");
+		for (int i = 1; i < table.size() - 1; i++)
+		{
+			int j = 0;
+			while ((j < i) && (table.getItemAtIndex(j).getKey() < table.getItemAtIndex(i).getKey()))
+			{
+				j++;
+			}
+			table.insert(i, j);
+		}
 	}
 
 }

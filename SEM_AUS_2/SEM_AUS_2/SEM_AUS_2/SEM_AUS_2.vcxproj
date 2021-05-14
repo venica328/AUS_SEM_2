@@ -142,7 +142,11 @@
     <ClCompile Include="..\structures\ds_routines.cpp" />
     <ClCompile Include="..\structures\memory_routines.cpp" />
     <ClCompile Include="..\structures\structure.cpp" />
+    <ClCompile Include="..\structures\table\sorting\sort.cpp" />
     <ClCompile Include="..\structures\vector\vector.cpp" />
+    <ClCompile Include="Methods.cpp" />
+    <ClCompile Include="Objekt.cpp" />
+    <ClCompile Include="ReadFiles.cpp" />
     <ClCompile Include="SEM_AUS_2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,11 +174,32 @@
     <ClInclude Include="..\structures\stack\stack.h" />
     <ClInclude Include="..\structures\structure.h" />
     <ClInclude Include="..\structures\structure_iterator.h" />
+    <ClInclude Include="..\structures\table\binary_search_tree.h" />
+    <ClInclude Include="..\structures\table\hash_table.h" />
+    <ClInclude Include="..\structures\table\linked_table.h" />
+    <ClInclude Include="..\structures\table\sequence_table.h" />
+    <ClInclude Include="..\structures\table\sorted_sequence_table.h" />
+    <ClInclude Include="..\structures\table\sorting\bubble_sort.h" />
+    <ClInclude Include="..\structures\table\sorting\heap_sort.h" />
+    <ClInclude Include="..\structures\table\sorting\insert_sort.h" />
+    <ClInclude Include="..\structures\table\sorting\merge_sort.h" />
+    <ClInclude Include="..\structures\table\sorting\quick_sort.h" />
+    <ClInclude Include="..\structures\table\sorting\radix_sort.h" />
+    <ClInclude Include="..\structures\table\sorting\select_sort.h" />
+    <ClInclude Include="..\structures\table\sorting\shell_sort.h" />
+    <ClInclude Include="..\structures\table\sorting\shuffle.h" />
+    <ClInclude Include="..\structures\table\sorting\sort.h" />
+    <ClInclude Include="..\structures\table\table.h" />
+    <ClInclude Include="..\structures\table\treap.h" />
+    <ClInclude Include="..\structures\table\unsorted_sequence_table.h" />
     <ClInclude Include="..\structures\tree\binary_tree.h" />
     <ClInclude Include="..\structures\tree\k_way_tree.h" />
     <ClInclude Include="..\structures\tree\multi_way_tree.h" />
     <ClInclude Include="..\structures\tree\tree.h" />
     <ClInclude Include="..\structures\vector\vector.h" />
+    <ClInclude Include="Methods.h" />
+    <ClInclude Include="Objekt.h" />
+    <ClInclude Include="ReadFiles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

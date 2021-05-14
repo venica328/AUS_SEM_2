@@ -22,7 +22,7 @@ namespace structures
 
 		/// <summary> Operacia klonovania. Vytvori a vrati duplikat udajovej struktury. </summary>
 		/// <returns> Ukazovatel na klon struktury. </returns>
-		Structure* clone() const override;	
+		Structure* clone() const override;
 
 		/// <summary> Vrati prvok tabulky na danom indexe. </summary>
 		/// <param name = "index"> Index prvku. </param>
@@ -55,7 +55,7 @@ namespace structures
 	}
 
 	template<typename K, typename T>
-	inline Structure * UnsortedSequenceTable<K, T>::clone() const
+	inline Structure* UnsortedSequenceTable<K, T>::clone() const
 	{
 		return new UnsortedSequenceTable<K, T>(*this);
 	}
@@ -63,8 +63,7 @@ namespace structures
 	template<typename K, typename T>
 	inline TableItem<K, T>& UnsortedSequenceTable<K, T>::getItemAtIndex(int index)
 	{
-		//TODO 09: UnsortedSequenceTable
-		throw std::exception("UnsortedSequenceTable<K, T>::populatePath: Not implemented yet.");
+		return *(*list_)[index];
 	}
 
 	template<typename K, typename T>
@@ -76,8 +75,9 @@ namespace structures
 	template<typename K, typename T>
 	inline void UnsortedSequenceTable<K, T>::swap(TableItem<K, T>& first, TableItem<K, T>& second)
 	{
-		//TODO 09: UnsortedSequenceTable
-		throw std::exception("UnsortedSequenceTable<K, T>::swap: Not implemented yet.");
+		TableItem<K, T> third = first;
+		first = second;
+		second = third;
 	}
 
 }

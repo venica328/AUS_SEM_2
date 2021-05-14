@@ -154,7 +154,7 @@ namespace structures
 	};
 
 	template<typename K, typename T>
-	inline HashTable<K, T>::HashTable():
+	inline HashTable<K, T>::HashTable() :
 		Table<K, T>(),
 		data_(new Array<Table<K, T>*>(DATA_ARRAY_SIZE)),
 		size_(0)
@@ -162,7 +162,7 @@ namespace structures
 	}
 
 	template<typename K, typename T>
-	inline HashTable<K, T>::HashTable(const HashTable<K, T>& other):
+	inline HashTable<K, T>::HashTable(const HashTable<K, T>& other) :
 		HashTable()
 	{
 		*this = other;
@@ -175,7 +175,7 @@ namespace structures
 	}
 
 	template<typename K, typename T>
-	inline Structure * HashTable<K, T>::clone() const
+	inline Structure* HashTable<K, T>::clone() const
 	{
 		return new HashTable<K, T>(*this);
 	}
@@ -205,7 +205,7 @@ namespace structures
 	}
 
 	template<typename K, typename T>
-	inline T & HashTable<K, T>::operator[](const K key)
+	inline T& HashTable<K, T>::operator[](const K key)
 	{
 		//TODO 09: HashTable
 		throw std::exception("HashTable<K, T>::operator[]: Not implemented yet.");
@@ -219,28 +219,28 @@ namespace structures
 	}
 
 	template<typename K, typename T>
-	inline void HashTable<K, T>::insert(const K & key, const T & data)
+	inline void HashTable<K, T>::insert(const K& key, const T& data)
 	{
 		//TODO 09: HashTable
 		throw std::exception("HashTable<K, T>::insert: Not implemented yet.");
 	}
 
 	template<typename K, typename T>
-	inline T HashTable<K, T>::remove(const K & key)
+	inline T HashTable<K, T>::remove(const K& key)
 	{
 		//TODO 09: HashTable
 		throw std::exception("HashTable<K, T>::remove: Not implemented yet.");
 	}
 
 	template<typename K, typename T>
-	inline bool HashTable<K, T>::tryFind(const K & key, T & data)
+	inline bool HashTable<K, T>::tryFind(const K& key, T& data)
 	{
 		//TODO 09: HashTable
 		throw std::exception("HashTable<K, T>::tryFind: Not implemented yet.");
 	}
 
 	template<typename K, typename T>
-	inline bool HashTable<K, T>::containsKey(const K & key)
+	inline bool HashTable<K, T>::containsKey(const K& key)
 	{
 		//TODO 09: HashTable
 		throw std::exception("HashTable<K, T>::containsKey: Not implemented yet.");
@@ -266,14 +266,14 @@ namespace structures
 	}
 
 	template<typename K, typename T>
-	inline int HashTable<K, T>::hashFunction(const K & key) const
+	inline int HashTable<K, T>::hashFunction(const K& key) const
 	{
 		// Knuth Variant on Division: h(k) = k(k + 3) mod m.
 		return (key * (key + 3)) % DATA_ARRAY_SIZE;
 	}
 
 	template<typename K, typename T>
-	inline HashTable<K, T>::HashTableIterator::HashTableIterator(const HashTable<K, T>* hashTable, int position):
+	inline HashTable<K, T>::HashTableIterator::HashTableIterator(const HashTable<K, T>* hashTable, int position) :
 		Iterator<TableItem<K, T>*>(),
 		hashTable_(hashTable),
 		position_(position),

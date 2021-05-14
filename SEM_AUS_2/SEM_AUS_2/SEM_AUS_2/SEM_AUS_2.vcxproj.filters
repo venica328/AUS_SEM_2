@@ -43,6 +43,9 @@
     <Filter Include="Structures\queue">
       <UniqueIdentifier>{8e5a2239-dcfd-4683-bfa6-ca9019d1f303}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Structures\table\sorting">
+      <UniqueIdentifier>{a7703e0c-a870-432c-a95f-2413d11a57d5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SEM_AUS_2.cpp">
@@ -59,6 +62,18 @@
     </ClCompile>
     <ClCompile Include="..\structures\vector\vector.cpp">
       <Filter>Structures\vector</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadFiles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Objekt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Methods.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\structures\table\sorting\sort.cpp">
+      <Filter>Structures\table\sorting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +163,69 @@
     </ClInclude>
     <ClInclude Include="..\structures\vector\vector.h">
       <Filter>Structures\vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\binary_search_tree.h">
+      <Filter>Structures\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\hash_table.h">
+      <Filter>Structures\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\linked_table.h">
+      <Filter>Structures\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sequence_table.h">
+      <Filter>Structures\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorted_sequence_table.h">
+      <Filter>Structures\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\table.h">
+      <Filter>Structures\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\treap.h">
+      <Filter>Structures\table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\unsorted_sequence_table.h">
+      <Filter>Structures\table</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadFiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Objekt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Methods.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\bubble_sort.h">
+      <Filter>Structures\table\sorting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\heap_sort.h">
+      <Filter>Structures\table\sorting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\insert_sort.h">
+      <Filter>Structures\table\sorting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\merge_sort.h">
+      <Filter>Structures\table\sorting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\quick_sort.h">
+      <Filter>Structures\table\sorting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\radix_sort.h">
+      <Filter>Structures\table\sorting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\select_sort.h">
+      <Filter>Structures\table\sorting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\shell_sort.h">
+      <Filter>Structures\table\sorting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\shuffle.h">
+      <Filter>Structures\table\sorting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\structures\table\sorting\sort.h">
+      <Filter>Structures\table\sorting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -58,29 +58,78 @@ namespace structures
 	}
 
 	template<typename K, typename T>
-	inline Structure * SortedSequenceTable<K, T>::clone() const
+	inline Structure* SortedSequenceTable<K, T>::clone() const
 	{
 		return new SortedSequenceTable<K, T>(*this);
 	}
 
 	template<typename K, typename T>
-	inline void SortedSequenceTable<K, T>::insert(const K & key, const T & data)
+	inline void SortedSequenceTable<K, T>::insert(const K& key, const T& data)
 	{
-		//TODO 09: SortedSequenceTable
-		throw std::exception("SortedSequenceTable<K, T>::insert: Not implemented yet.");
+		bool found = false;
+		int index = indexOfKey(key, 0, static_cast<int>(size()), found);
+
+		if (!found)
+		{
+			TableItem<K, T>* newItem = new TableItem<K, T>(key, data);
+			list_->insert(newItem, index);
+		}
+		else
+		{
+			throw std::logic_error("Key already present.");
+		}
 	}
 
 	template<typename K, typename T>
-	inline TableItem<K, T>* SortedSequenceTable<K, T>::findTableItem(const K & key) const
+	inline TableItem<K, T>* SortedSequenceTable<K, T>::findTableItem(const K& key) const
 	{
-		//TODO 09: SortedSequenceTable
-		throw std::exception("SortedSequenceTable<K, T>::findTableItem: Not implemented yet.");
+		if (size() == 0)
+		{
+			return nullptr;
+		}
+		else
+		{
+			bool found = false;
+			int index = indexOfKey(key, 0, static_cast<int>(size()), found);
+			return found ? (*list_)[index] : nullptr;
+		}
 	}
 
 	template<typename K, typename T>
-	inline int SortedSequenceTable<K, T>::indexOfKey(const K & key, int indexStart, int indexEnd, bool & found) const
+	inline int SortedSequenceTable<K, T>::indexOfKey(const K& key, int indexStart, int indexEnd, bool& found) const
 	{
-		//TODO 09: SortedSequenceTable
-		throw std::exception("SortedSequenceTable<K, T>::indexOfKey: Not implemented yet.");
+		int indexSize = static_cast<int>(size());
+		if (indexStart == indexSize)
+		{
+			found = false;
+			return indexStart;
+		}
+		int pivot = (indexStart + indexEnd) / 2;
+		K keyAtPivot = (*list_)[pivot]->getKey();
+		if (keyAtPivot == key)
+		{
+			found = true;
+			return pivot;
+		}
+		else
+		{
+			if (indexStart == indexEnd)
+			{
+				found = false;
+				return key < keyAtPivot ? pivot : pivot + 1;
+			}
+			else
+			{
+				if (keyAtPivot < key)
+				{
+					indexStart = pivot + 1;
+				}
+				else
+				{
+					indexEnd = pivot;
+				}
+				return indexOfKey(key, indexStart, indexEnd, found);
+			}
+		}
 	}
 }
