@@ -4,12 +4,15 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <locale.h>
 
 using namespace std;
 using namespace structures;
 
 ReadFiles::ReadFiles()
 {
+	treap = new Treap<string, Objekt*>();
+	addData = new Treap<string, AddData*>();
 }
 
 void ReadFiles::readSlovensko()
@@ -17,17 +20,15 @@ void ReadFiles::readSlovensko()
 	ifstream file;
 	file.open("../CSV/Obce.csv");
 	string line;
-	string nazov;
+	string nazov = setlocale(LC_ALL,"slovak");
 	
 	int rows = 0;
-	int pocObjektov=0;
 
 	int pocPreprodObyvatelov;
 	int pocProduktivnychObyvatelov;
 	int pocPoprodObyvatelov;
 	int celkovaVymera;
 	int zastavanaPlocha;
-
 	
 	while (!file.eof())
 	{
@@ -43,13 +44,7 @@ void ReadFiles::readSlovensko()
 			string pom;
 			nazov = line;
 
-			int siz = nazov.length();
-			for (int i = 0; i < nazov.length(); i++) {
-				if (nazov[i] == '\n') {
-					pom = nazov.substr(i+1, siz);
-					nazov = pom;
-				}
-			}
+			pom = this->separateData(nazov, pom);
 			
 			getline(file, line, ';');
 			pocPreprodObyvatelov = stoi(line);
@@ -66,14 +61,29 @@ void ReadFiles::readSlovensko()
 				Objekt* slovensko = new Objekt(nazov, pocPreprodObyvatelov + pocProduktivnychObyvatelov +
 					pocPoprodObyvatelov, pocPreprodObyvatelov, pocProduktivnychObyvatelov, pocPoprodObyvatelov,
 					celkovaVymera, celkovaVymera, zastavanaPlocha);
-				std::cout << slovensko->vypisObjekt() << endl;
+				//std::cout << slovensko->vypisObjekt() << endl;
+
+				AddData* data = new AddData(nazov);
+				slovensko->setAddedData(data);
+				string p = "Prievidza";
+				
 			}
 			else
 			{
 				Objekt* slovensko = new Objekt(pom, pocPreprodObyvatelov + pocProduktivnychObyvatelov +
 					pocPoprodObyvatelov, pocPreprodObyvatelov, pocProduktivnychObyvatelov, pocPoprodObyvatelov,
 					celkovaVymera, celkovaVymera, zastavanaPlocha);
-				std::cout << slovensko->vypisObjekt() << endl;
+				//std::cout << slovensko->vypisObjekt() << endl;
+
+				AddData* data = new AddData(pom);
+				slovensko->setAddedData(data);
+
+				
+				string p = "Valaská Belá";
+				if (slovensko->getAddedData(pom)->getNazov() == p)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+				}
 			}
 		}	
 	}
@@ -94,6 +104,103 @@ void ReadFiles::readOkresy()
 
 void ReadFiles::readObce()
 {
+}
+
+void ReadFiles::readClenenie()
+{
+	ifstream file;
+	file.open("../CSV/Clenenie.csv");
+	string line;
+	string nazovObce = setlocale(LC_ALL, "slovak");
+	string nazovOkresu = setlocale(LC_ALL, "slovak");
+	string nazovKraja = setlocale(LC_ALL, "slovak");
+	string nazovRepubliky = "Slovensko";
+
+	int rows = 0;
+	string pom;
+	string pom2;
+
+	while (!file.eof())
+	{
+		rows++;
+		
+		if (rows < 2)
+		{
+			getline(file, line);
+			getline(file, line, ';');
+		}
+
+		if (rows > 1) 
+		{
+			nazovObce = line;
+			getline(file, line, ';');
+			nazovOkresu = line;
+			getline(file, line, ';');
+			nazovKraja = line;
+
+			pom = this->separateObec(nazovObce, pom);
+			pom2 = this->separateKraj(nazovKraja, pom2);
+
+			if (rows == 2) 
+			{
+				ClenenieSR* clenenie = new ClenenieSR(nazovObce, nazovOkresu, pom2, nazovRepubliky);
+				std::cout << clenenie->vypisObjekt() << endl;
+
+				AddData* data = new AddData(nazovObce);
+				//clenenie->setAddedData(data);
+				string p = "Prievidza";
+			}
+			else
+			{
+				ClenenieSR* clenenie = new ClenenieSR(pom, nazovOkresu, pom2, nazovRepubliky);
+				std::cout << clenenie->vypisObjekt() << endl;
+
+				AddData* data = new AddData(nazovObce);
+				//clenenie->setAddedData(data);
+				string p = "Prievidza";
+			}
+		}
+	}
+	//celkovy pocet riadkov
+	std::cout << rows << endl;
+
+	file.close();
+}
+
+string ReadFiles::separateData(string obec, string name)
+{
+	int siz = obec.length();
+	for (int i = 0; i < obec.length(); i++) {
+		if (obec[i] == '\n') {
+			name = obec.substr(i + 1, siz);
+			obec = name;
+		}
+	}
+	return name;
+}
+
+string ReadFiles::separateKraj(string kraj, string name)
+{
+	int siz = kraj.length();
+	for (int i = 0; i < kraj.length(); i++) {
+		if (kraj[i] == '\n') {
+			name = kraj.substr(0, i);
+			kraj = name;
+		}
+	}
+	return name;
+}
+
+string ReadFiles::separateObec(string obec, string name)
+{
+	int siz = obec.length();
+	for (int i = 0; i < obec.length(); i++) {
+		if (obec[i] == '\n') {
+			name = obec.substr(i+1,siz);
+			obec = name;
+		}
+	}
+	return name;
 }
 
 ReadFiles::~ReadFiles()
