@@ -18,14 +18,16 @@ public:
 	void readKraje();
 	void readOkresy();
 	void readObce();
-	string readClenenie(string obec);
+	void readClenenie();
 	string separateData(string obec, string name);
 	string separateKraj(string kraj, string name);
 	string separateObec(string obec, string name);
+
 	structures::Treap<string, Objekt*>* treap = nullptr;
 	structures::Treap<string, AddData*>* addData = nullptr;
 	structures::Treap<int, AddDataObyvatelia*>* addDataObyvatelia = nullptr;
 	structures::Treap<int, AddDataZastavanost*>* addDataZastavanost = nullptr;
+	structures::Treap<string, Obec*>* addDataObec = nullptr;
 	~ReadFiles();
 };
 

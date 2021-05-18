@@ -13,8 +13,7 @@ int main()
 
     ReadFiles* r = new ReadFiles();
     r->readSlovensko();
-   // r->readClenenie();
-    //cout << r << endl;
+    r->readClenenie();
 
     //Methods* method = new Methods();
    // method->method1();

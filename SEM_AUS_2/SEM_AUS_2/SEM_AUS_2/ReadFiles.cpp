@@ -15,6 +15,7 @@ ReadFiles::ReadFiles()
 	addData = new Treap<string, AddData*>();
 	addDataObyvatelia = new Treap<int, AddDataObyvatelia*>();
 	addDataZastavanost = new Treap<int, AddDataZastavanost*>();
+	addDataObec = new Treap<string, Obec*>();
 }
 
 void ReadFiles::readSlovensko()
@@ -23,6 +24,8 @@ void ReadFiles::readSlovensko()
 	file.open("../CSV/Obce.csv");
 	string line;
 	string nazov = setlocale(LC_ALL,"slovak");
+	string nazovObce;
+	string pom;
 	
 	int rows = 0;
 
@@ -35,7 +38,7 @@ void ReadFiles::readSlovensko()
 	while (!file.eof())
 	{
 		rows++;
-
+		
 		if (rows < 2)
 		{
 			getline(file, line);
@@ -43,9 +46,8 @@ void ReadFiles::readSlovensko()
 		}
 		
 		if (rows > 1) {
-			string pom;
+			
 			nazov = line;
-
 			pom = this->separateData(nazov, pom);
 			
 			getline(file, line, ';');
@@ -60,56 +62,48 @@ void ReadFiles::readSlovensko()
 			zastavanaPlocha = stoi(line);
 		
 			if (rows == 2) {
-				Objekt* slovensko = new Objekt(nazov, pocPreprodObyvatelov + pocProduktivnychObyvatelov +
-					pocPoprodObyvatelov, pocPreprodObyvatelov, pocProduktivnychObyvatelov, pocPoprodObyvatelov,
-					celkovaVymera - zastavanaPlocha, celkovaVymera, zastavanaPlocha);
-				//std::cout << slovensko->vypisObjekt() << endl;
-
-				AddData* data = new AddData(nazov);
-				slovensko->setAddedData(data);
-				AddDataObyvatelia* dataObyvatelia = new AddDataObyvatelia(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
-					pocPoprodObyvatelov);
-				slovensko->setAddedDataPocObyvatelov(dataObyvatelia);
-				AddDataZastavanost* dataZastavanost = new AddDataZastavanost(zastavanaPlocha);
-				slovensko->setAddedDataZastavanost(dataZastavanost);
-				
+				nazovObce = nazov;				
 			}
 			else
 			{
-				Objekt* slovensko = new Objekt(pom, pocPreprodObyvatelov + pocProduktivnychObyvatelov +
-					pocPoprodObyvatelov, pocPreprodObyvatelov, pocProduktivnychObyvatelov, pocPoprodObyvatelov,
-					celkovaVymera - zastavanaPlocha, celkovaVymera, zastavanaPlocha);
-				//std::cout << slovensko->vypisObjekt() << endl;
-
-				AddData* data = new AddData(pom);
-				slovensko->setAddedData(data);
-				AddDataObyvatelia* dataObyvatelia = new AddDataObyvatelia(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
-					pocPoprodObyvatelov);
-				slovensko->setAddedDataPocObyvatelov(dataObyvatelia);
-				AddDataZastavanost* dataZastavanost = new AddDataZastavanost(celkovaVymera - zastavanaPlocha);
-				slovensko->setAddedDataZastavanost(dataZastavanost);
-
-				/**
-				string p = "Valaská Belá";
-				if (slovensko->getAddedData(pom)->getNazov() == p)
-				{
-					cout << slovensko->vypisObjekt() << endl;
-				}
-				int p = 2051;
-				if (slovensko->getAddedDataPocObyvatelov(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
-					pocPoprodObyvatelov)->getPocetObyvatelov() <= 100)
-				{
-					cout << slovensko->vypisObjekt() << endl;
-				}
-				if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() > 50000)
-				{
-					cout << slovensko->vypisObjekt() << endl;
-				}**/
+				nazovObce = pom;
 			}
+
+			Objekt* slovensko = new Objekt(nazovObce, pocPreprodObyvatelov + pocProduktivnychObyvatelov +
+				pocPoprodObyvatelov, pocPreprodObyvatelov, pocProduktivnychObyvatelov, pocPoprodObyvatelov,
+				celkovaVymera - zastavanaPlocha, celkovaVymera, zastavanaPlocha);
+			//std::cout << slovensko->vypisObjekt() << endl;
+
+			AddData* data = new AddData(nazovObce);
+			slovensko->setAddedData(data);
+
+			AddDataObyvatelia* dataObyvatelia = new AddDataObyvatelia(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
+				pocPoprodObyvatelov);
+			slovensko->setAddedDataPocObyvatelov(dataObyvatelia);
+
+			AddDataZastavanost* dataZastavanost = new AddDataZastavanost(celkovaVymera - zastavanaPlocha);
+			slovensko->setAddedDataZastavanost(dataZastavanost);
+
+			
+			string p = "Prievidza";
+			if (slovensko->getAddedData(nazovObce)->getNazov() == p)
+			{
+				cout << slovensko->vypisObjekt() << endl;
+			}/**
+			int p = 2051;
+			if (slovensko->getAddedDataPocObyvatelov(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
+				pocPoprodObyvatelov)->getPocetObyvatelov() <= 100)
+			{
+				cout << slovensko->vypisObjekt() << endl;
+			}
+			if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() > 50000)
+			{
+				cout << slovensko->vypisObjekt() << endl;
+			}**/
 		}	
 	}
 	//celkovy pocet riadkov
-	std::cout << rows <<endl;
+	//std::cout << rows <<endl;
 
 	file.close();
 }
@@ -127,11 +121,12 @@ void ReadFiles::readObce()
 {
 }
 
-string ReadFiles::readClenenie(string obec)
+void ReadFiles::readClenenie()
 {
 	ifstream file;
 	file.open("../CSV/Clenenie.csv");
 	string line;
+	string nazov;
 	string nazovObce = setlocale(LC_ALL, "slovak");
 	string nazovOkresu = setlocale(LC_ALL, "slovak");
 	string nazovKraja = setlocale(LC_ALL, "slovak");
@@ -164,30 +159,29 @@ string ReadFiles::readClenenie(string obec)
 
 			if (rows == 2) 
 			{
-				ClenenieSR* clenenie = new ClenenieSR(nazovObce, nazovOkresu, pom2, nazovRepubliky);
-				std::cout << clenenie->vypisObjekt() << endl;
-
-				AddData* data = new AddData(nazovObce);
-				//clenenie->setAddedData(data);
-				string p = "Prievidza";
+				nazov = nazovObce;
 			}
 			else
 			{
-				ClenenieSR* clenenie = new ClenenieSR(pom, nazovOkresu, pom2, nazovRepubliky);
-				std::cout << clenenie->vypisObjekt() << endl;
+				nazov = pom;
+			}
+			
+			ClenenieSR* clenenie = new ClenenieSR(nazov, nazovOkresu, pom2, nazovRepubliky);
+			//std::cout << clenenie->vypisObjekt() << endl;
 
-				AddData* data = new AddData(nazovObce);
-				//clenenie->setAddedData(data);
-				string p = "Prievidza";
+			Obec* obec = new Obec(nazov);
+			clenenie->setDataObec(obec);
+			string p = "Prievidza";
+			if (clenenie->getDataObec(nazov)->getNazovObce() == p)
+			{
+				cout << clenenie->vypisObjekt() << endl;
 			}
 		}
 	}
 	//celkovy pocet riadkov
-	std::cout << rows << endl;
+	//std::cout << rows << endl;
 
 	file.close();
-
-	return string;
 }
 
 string ReadFiles::separateData(string obec, string name)

@@ -1,12 +1,32 @@
 #include "ClenenieSR.h"
 
 ClenenieSR::ClenenieSR(string nazovObce, string nazovOkresu, string nazovKraja, string nazovRepubliky) :
-	nazovObce(nazovObce),nazovOkresu(nazovOkresu),nazovKraja(nazovKraja),nazovRepubliky(nazovRepubliky)
+	nazovObce(nazovObce),nazovOkresu(nazovOkresu),nazovKraja(nazovKraja),nazovRepubliky(nazovRepubliky),
+	objektObec(new Treap<string, Obec*>())
 {
 }
 
 ClenenieSR::~ClenenieSR()
 {
+}
+
+void ClenenieSR::setDataObec(Obec* dataObec)
+{
+	string key = dataObec->getNazovObce();
+	//key = setlocale(LC_ALL, "slovak");
+	objektObec->insert(key, dataObec);
+}
+
+Obec* ClenenieSR::getDataObec(string nazov)
+{
+	if (objektObec->containsKey(nazov))
+	{
+		return (*objektObec)[nazov];
+	}
+	else
+	{
+		return nullptr;
+	}
 }
 
 string ClenenieSR::getRepubliku()
@@ -35,6 +55,6 @@ string ClenenieSR::vypisObjekt()
 	vypisInfo << "Obec: " << getNazovObce() << endl;
 	vypisInfo << "Okres: " << getNazovOkresu() << endl;
 	vypisInfo << "Kraj: " << getNazovKraja() << endl;
-	vypisInfo << "Republika: " << getRepubliku() << endl;
+	vypisInfo << "Stat: " << getRepubliku() << endl;
 	return vypisInfo.str();
 }
