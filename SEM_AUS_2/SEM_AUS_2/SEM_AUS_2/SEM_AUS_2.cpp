@@ -12,12 +12,12 @@ int main()
     initHeapMonitor();
 
     ReadFiles* r = new ReadFiles();
-   // r->readSlovensko();
-    r->readClenenie();
-    cout << r << endl;
+    r->readSlovensko();
+   // r->readClenenie();
+    //cout << r << endl;
 
-    Methods* method = new Methods();
-    method->method1();
+    //Methods* method = new Methods();
+   // method->method1();
 
     cout << "Hello World!\n";
 }

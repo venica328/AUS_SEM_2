@@ -12,3 +12,4 @@ string AddData::getNazov()
 {
     return nazov;
 }
+

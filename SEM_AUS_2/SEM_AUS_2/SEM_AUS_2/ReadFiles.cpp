@@ -13,6 +13,8 @@ ReadFiles::ReadFiles()
 {
 	treap = new Treap<string, Objekt*>();
 	addData = new Treap<string, AddData*>();
+	addDataObyvatelia = new Treap<int, AddDataObyvatelia*>();
+	addDataZastavanost = new Treap<int, AddDataZastavanost*>();
 }
 
 void ReadFiles::readSlovensko()
@@ -60,30 +62,49 @@ void ReadFiles::readSlovensko()
 			if (rows == 2) {
 				Objekt* slovensko = new Objekt(nazov, pocPreprodObyvatelov + pocProduktivnychObyvatelov +
 					pocPoprodObyvatelov, pocPreprodObyvatelov, pocProduktivnychObyvatelov, pocPoprodObyvatelov,
-					celkovaVymera, celkovaVymera, zastavanaPlocha);
+					celkovaVymera - zastavanaPlocha, celkovaVymera, zastavanaPlocha);
 				//std::cout << slovensko->vypisObjekt() << endl;
 
 				AddData* data = new AddData(nazov);
 				slovensko->setAddedData(data);
-				string p = "Prievidza";
+				AddDataObyvatelia* dataObyvatelia = new AddDataObyvatelia(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
+					pocPoprodObyvatelov);
+				slovensko->setAddedDataPocObyvatelov(dataObyvatelia);
+				AddDataZastavanost* dataZastavanost = new AddDataZastavanost(zastavanaPlocha);
+				slovensko->setAddedDataZastavanost(dataZastavanost);
 				
 			}
 			else
 			{
 				Objekt* slovensko = new Objekt(pom, pocPreprodObyvatelov + pocProduktivnychObyvatelov +
 					pocPoprodObyvatelov, pocPreprodObyvatelov, pocProduktivnychObyvatelov, pocPoprodObyvatelov,
-					celkovaVymera, celkovaVymera, zastavanaPlocha);
+					celkovaVymera - zastavanaPlocha, celkovaVymera, zastavanaPlocha);
 				//std::cout << slovensko->vypisObjekt() << endl;
 
 				AddData* data = new AddData(pom);
 				slovensko->setAddedData(data);
+				AddDataObyvatelia* dataObyvatelia = new AddDataObyvatelia(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
+					pocPoprodObyvatelov);
+				slovensko->setAddedDataPocObyvatelov(dataObyvatelia);
+				AddDataZastavanost* dataZastavanost = new AddDataZastavanost(celkovaVymera - zastavanaPlocha);
+				slovensko->setAddedDataZastavanost(dataZastavanost);
 
-				
+				/**
 				string p = "Valaská Belá";
 				if (slovensko->getAddedData(pom)->getNazov() == p)
 				{
 					cout << slovensko->vypisObjekt() << endl;
 				}
+				int p = 2051;
+				if (slovensko->getAddedDataPocObyvatelov(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
+					pocPoprodObyvatelov)->getPocetObyvatelov() <= 100)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+				}
+				if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() > 50000)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+				}**/
 			}
 		}	
 	}
@@ -106,7 +127,7 @@ void ReadFiles::readObce()
 {
 }
 
-void ReadFiles::readClenenie()
+string ReadFiles::readClenenie(string obec)
 {
 	ifstream file;
 	file.open("../CSV/Clenenie.csv");
@@ -165,6 +186,8 @@ void ReadFiles::readClenenie()
 	std::cout << rows << endl;
 
 	file.close();
+
+	return string;
 }
 
 string ReadFiles::separateData(string obec, string name)

@@ -2,6 +2,7 @@
 #include <sstream>
 #include <locale.h>
 #include <iostream>
+#include <string>
 
 using namespace std;
 using namespace structures;
@@ -10,9 +11,11 @@ Objekt::Objekt(string nazov, int pocetObyvatelov, int pocPreprodObyvatelov, int 
 	int pocPoprodObyvatelov, int zastavanost, int celkovaVymera, int zastavanaPlocha) :
 	nazov(nazov), pocetObyvatelov(pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov), 
 	pocPreprodObyvatelov(pocPreprodObyvatelov),	pocProduktivnychObyvatelov(pocProduktivnychObyvatelov), 
-	pocPoprodObyvatelov(pocPoprodObyvatelov), zastavanost(zastavanost),
+	pocPoprodObyvatelov(pocPoprodObyvatelov), zastavanost(celkovaVymera - zastavanaPlocha),
 	celkovaVymera(celkovaVymera), zastavanaPlocha(zastavanaPlocha),
-	objekty(new Treap<string, AddData*>()),obce(new Treap<string, Objekt*>())
+	objektNazov(new Treap<string, AddData*>()),
+	objektObyvatelia(new Treap<int, AddDataObyvatelia*>()),
+	objektZastavanost(new Treap<int, AddDataZastavanost*>())
 {
 }
 
@@ -24,17 +27,56 @@ void Objekt::setAddedData(AddData* data)
 {
 	string key = data->getNazov();
 	//key = setlocale(LC_ALL, "slovak");
-	objekty->insert(key, data);
-	objekty->isEmpty();
+	objektNazov->insert(key, data);
+	objektNazov->isEmpty();
+}
+
+void Objekt::setAddedDataPocObyvatelov(AddDataObyvatelia* pocObyvatelov)
+{
+	int key = pocObyvatelov->getPocetObyvatelov();
+	//key = setlocale(LC_ALL, "slovak");
+	objektObyvatelia->insert(key, pocObyvatelov);
+}
+
+void Objekt::setAddedDataZastavanost(AddDataZastavanost* zastavanost)
+{
+	int key = zastavanost->getZastavanost();
+	//key = setlocale(LC_ALL, "slovak");
+	objektZastavanost->insert(key, zastavanost);
 }
 
 AddData* Objekt::getAddedData(string nazov)
 {
 	//nazov = setlocale(LC_ALL, "slovak");
 	//cout << "nazov: " << (*objekty)[nazov]->getNazov() << endl;
-	if (objekty->containsKey(nazov))
+	if (objektNazov->containsKey(nazov))
 	{
-		return (*objekty)[nazov];
+		return (*objektNazov)[nazov];
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+
+AddDataObyvatelia* Objekt::getAddedDataPocObyvatelov(int pocet)
+{
+	if (objektObyvatelia->containsKey(pocet))
+	{
+		return (*objektObyvatelia)[pocet];
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+AddDataZastavanost* Objekt::getAddedDataZastavanost(int zastavanost)
+{
+	if (objektZastavanost->containsKey(zastavanost))
+	{
+		return (*objektZastavanost)[zastavanost];
 	}
 	else
 	{
