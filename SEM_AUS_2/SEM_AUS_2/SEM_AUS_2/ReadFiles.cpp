@@ -9,6 +9,12 @@
 using namespace std;
 using namespace structures;
 
+string argNazovObce = "";
+int argCisloUlohy;
+int argMin;
+int argMax;
+int argZastavanost;
+
 ReadFiles::ReadFiles()
 {
 	treap = new Treap<string, Objekt*>();
@@ -24,7 +30,7 @@ void ReadFiles::readSlovensko()
 	file.open("../CSV/Obce.csv");
 	string line;
 	string nazov = setlocale(LC_ALL,"slovak");
-	string nazovObce;
+	string nazovObce = setlocale(LC_ALL, "slovak");
 	string pom;
 	
 	int rows = 0;
@@ -72,7 +78,6 @@ void ReadFiles::readSlovensko()
 			Objekt* slovensko = new Objekt(nazovObce, pocPreprodObyvatelov + pocProduktivnychObyvatelov +
 				pocPoprodObyvatelov, pocPreprodObyvatelov, pocProduktivnychObyvatelov, pocPoprodObyvatelov,
 				celkovaVymera - zastavanaPlocha, celkovaVymera, zastavanaPlocha);
-			//std::cout << slovensko->vypisObjekt() << endl;
 
 			AddData* data = new AddData(nazovObce);
 			slovensko->setAddedData(data);
@@ -84,22 +89,30 @@ void ReadFiles::readSlovensko()
 			AddDataZastavanost* dataZastavanost = new AddDataZastavanost(celkovaVymera - zastavanaPlocha);
 			slovensko->setAddedDataZastavanost(dataZastavanost);
 
-			
-			string p = "Prievidza";
-			if (slovensko->getAddedData(nazovObce)->getNazov() == p)
+			if (argCisloUlohy == 11)
 			{
-				cout << slovensko->vypisObjekt() << endl;
-			}/**
-			int p = 2051;
-			if (slovensko->getAddedDataPocObyvatelov(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
-				pocPoprodObyvatelov)->getPocetObyvatelov() <= 100)
-			{
-				cout << slovensko->vypisObjekt() << endl;
+				if (slovensko->getAddedData(nazovObce)->getNazov() == argNazovObce)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+				}
 			}
-			if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() > 50000)
+			if (argCisloUlohy == 12)
 			{
-				cout << slovensko->vypisObjekt() << endl;
-			}**/
+				int poc_Obyvatelov = pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov;
+				if (slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() <= argMax && 
+					slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() >= argMin)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+				}
+			}
+			if (argCisloUlohy == 13)
+			{
+				if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() <= argMax &&
+					slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() >= argMin)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+				}
+			}
 		}	
 	}
 	//celkovy pocet riadkov
@@ -108,18 +121,7 @@ void ReadFiles::readSlovensko()
 	file.close();
 }
 
-void ReadFiles::readKraje()
-{
-	
-}
 
-void ReadFiles::readOkresy()
-{
-}
-
-void ReadFiles::readObce()
-{
-}
 
 void ReadFiles::readClenenie()
 {
@@ -171,8 +173,9 @@ void ReadFiles::readClenenie()
 
 			Obec* obec = new Obec(nazov);
 			clenenie->setDataObec(obec);
-			string p = "Prievidza";
-			if (clenenie->getDataObec(nazov)->getNazovObce() == p)
+
+
+			if (clenenie->getDataObec(nazov)->getNazovObce() == argNazovObce)
 			{
 				cout << clenenie->vypisObjekt() << endl;
 			}
@@ -182,6 +185,38 @@ void ReadFiles::readClenenie()
 	//std::cout << rows << endl;
 
 	file.close();
+}
+
+string ReadFiles::zistiNazovObce(string nazov)
+{
+	argNazovObce = nazov;
+	int siz = nazov.length();
+	for (int i = 0; i < nazov.length(); i++) {
+		if (nazov[i] == '*')
+		{
+			nazov[i] = ' ';
+		}
+	}
+	argNazovObce = nazov;
+	return nazov;
+}
+
+int ReadFiles::zistiCisloUlohy(int uloha)
+{
+	argCisloUlohy = uloha;
+	return uloha;
+}
+
+int ReadFiles::zistiMIN(int min)
+{
+	argMin = min;
+	return min;
+}
+
+int ReadFiles::zistiMAX(int max)
+{
+	argMax = max;
+	return max;
 }
 
 string ReadFiles::separateData(string obec, string name)

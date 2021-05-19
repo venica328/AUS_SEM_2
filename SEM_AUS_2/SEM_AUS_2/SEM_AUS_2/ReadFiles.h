@@ -15,10 +15,11 @@ private:
 public:
 	ReadFiles();
 	void readSlovensko();
-	void readKraje();
-	void readOkresy();
-	void readObce();
 	void readClenenie();
+	string zistiNazovObce(string nazov);
+	int zistiCisloUlohy(int uloha);
+	int zistiMIN(int min);
+	int zistiMAX(int max);
 	string separateData(string obec, string name);
 	string separateKraj(string kraj, string name);
 	string separateObec(string obec, string name);
