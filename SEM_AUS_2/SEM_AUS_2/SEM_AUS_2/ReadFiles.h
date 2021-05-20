@@ -17,6 +17,7 @@ public:
 	void readSlovensko();
 	void readClenenie();
 	string zistiNazovObce(string nazov);
+	string zistiNazovOkresu(string nazov);
 	int zistiCisloUlohy(int uloha);
 	int zistiMIN(int min);
 	int zistiMAX(int max);
@@ -29,6 +30,7 @@ public:
 	structures::Treap<int, AddDataObyvatelia*>* addDataObyvatelia = nullptr;
 	structures::Treap<int, AddDataZastavanost*>* addDataZastavanost = nullptr;
 	structures::Treap<string, Obec*>* addDataObec = nullptr;
+	structures::Treap<string, Okres*>* addDataOkres = nullptr;
 	~ReadFiles();
 };
 

@@ -21,6 +21,26 @@ Objekt::Objekt(string nazov, int pocetObyvatelov, int pocPreprodObyvatelov, int 
 
 Objekt::~Objekt()
 {
+	for (auto it = objektNazov->begin(); it != objektNazov->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	objektNazov->clear();
+	delete objektNazov;
+	objektNazov = nullptr;
+
+	for (auto it = objektObyvatelia->begin(); it != objektObyvatelia->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	objektObyvatelia->clear();
+	delete objektObyvatelia;
+	objektObyvatelia = nullptr;
+
+	for (auto it = objektZastavanost->begin(); it != objektZastavanost->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	objektZastavanost->clear();
+	delete objektZastavanost;
+	objektZastavanost = nullptr;
 }
 
 void Objekt::setAddedData(AddData* data)

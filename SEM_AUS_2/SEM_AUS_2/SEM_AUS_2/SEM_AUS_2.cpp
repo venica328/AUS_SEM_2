@@ -21,7 +21,7 @@ int main(char* arc, char** argv)
     int zastavanost;
     string nazovObce;
     string cele;
-  //  char nazovObce[256];
+    string nazovOkresu;
 
     ReadFiles* r = new ReadFiles();    
 
@@ -59,7 +59,6 @@ int main(char* arc, char** argv)
             switch (y)
             {
             case 1:
-                
                 r->zistiCisloUlohy(11);
                 cout << "Zadajte nazov obce:" << endl;
                 cin >> nazovObce;
@@ -77,7 +76,6 @@ int main(char* arc, char** argv)
                 cin >> max;
                 r->zistiMAX(max);
                 r->readSlovensko();
-                r->readClenenie();
                 break;
             case 3:
                 r->zistiCisloUlohy(13);
@@ -89,7 +87,57 @@ int main(char* arc, char** argv)
                 cin >> max;
                 r->zistiMAX(max);
                 r->readSlovensko();
+                break;
+            default:
+                cout << "Zadali ste zlu hodnotu!" << endl;
+                break;
+            }
+            break;
+
+        case 2:
+            cout << "Zoradte obce podla: " << endl;
+            cout << "1 = nazov" << endl;
+            cout << "2 = pocet obyvatelov" << endl;
+            cout << "3 = zastavanost" << endl;
+            cin >> y;
+            switch (y)
+            {
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                cout << "Zadali ste zlu hodnotu!" << endl;
+                break;
+            }
+            break;
+
+        case 3:
+            cout << "Vyber blizsiu specifikaciu!" << endl;
+            cout << "1 = Zobrazenie podla typu: obec" << endl;
+            cout << "2 = Zobrazenie podla typu: okres" << endl;
+            cout << "3 = Zobrazenie podla typu: kraj" << endl;
+            cin >> y;
+            switch (y)
+            {
+            case 1:
+                r->zistiCisloUlohy(31);
+                cout << "Vybrali ste si zobrazenie obci!" << endl;
+                r->readSlovensko();
+                break;
+            case 2:
+                r->zistiCisloUlohy(32);
+                cout << "Vybrali ste si zobrazenie podla okresov!" << endl;
+                cout << "Zadajte okres: ";
+                cin >> nazovOkresu;
+                r->zistiNazovOkresu(nazovOkresu);
                 r->readClenenie();
+                break;
+            case 3:
+                r->zistiCisloUlohy(33);
+                cout << "Vybrali ste si zobrazenie podla krajov!" << endl;
                 break;
             default:
                 cout << "Zadali ste zlu hodnotu!" << endl;
@@ -103,6 +151,7 @@ int main(char* arc, char** argv)
         }
 
     }
+    delete r;
     return 0;
     
 }

@@ -10,10 +10,14 @@ using namespace std;
 using namespace structures;
 
 string argNazovObce = "";
+string argNazovOkresu = "";
+string argOkres = "";
+string argObec = "";
 int argCisloUlohy;
 int argMin;
 int argMax;
 int argZastavanost;
+int argumentZastavanost;
 
 ReadFiles::ReadFiles()
 {
@@ -22,6 +26,7 @@ ReadFiles::ReadFiles()
 	addDataObyvatelia = new Treap<int, AddDataObyvatelia*>();
 	addDataZastavanost = new Treap<int, AddDataZastavanost*>();
 	addDataObec = new Treap<string, Obec*>();
+	addDataOkres = new Treap<string, Okres*>();
 }
 
 void ReadFiles::readSlovensko()
@@ -29,7 +34,7 @@ void ReadFiles::readSlovensko()
 	ifstream file;
 	file.open("../CSV/Obce.csv");
 	string line;
-	string nazov = setlocale(LC_ALL,"slovak");
+	string nazov = setlocale(LC_ALL, "slovak");
 	string nazovObce = setlocale(LC_ALL, "slovak");
 	string pom;
 	
@@ -55,7 +60,7 @@ void ReadFiles::readSlovensko()
 			
 			nazov = line;
 			pom = this->separateData(nazov, pom);
-			
+
 			getline(file, line, ';');
 			pocPreprodObyvatelov = stoi(line);
 			getline(file, line, ';');
@@ -96,13 +101,21 @@ void ReadFiles::readSlovensko()
 					cout << slovensko->vypisObjekt() << endl;
 				}
 			}
+			if (argCisloUlohy == 31)
+			{
+				argObec = slovensko->getNazov();
+				cout << slovensko->vypisObjekt() << endl;
+				this->readClenenie();
+			}
 			if (argCisloUlohy == 12)
 			{
 				int poc_Obyvatelov = pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov;
 				if (slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() <= argMax && 
 					slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() >= argMin)
 				{
+					argObec = slovensko->getNazov();
 					cout << slovensko->vypisObjekt() << endl;
+					this->readClenenie();
 				}
 			}
 			if (argCisloUlohy == 13)
@@ -110,9 +123,23 @@ void ReadFiles::readSlovensko()
 				if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() <= argMax &&
 					slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() >= argMin)
 				{
+					argObec = slovensko->getNazov();
+					cout << slovensko->vypisObjekt() << endl;
+					this->readClenenie();
+				}
+			}
+			if (argCisloUlohy == 32)
+			{
+				if (slovensko->getNazov() == argObec)
+				{
 					cout << slovensko->vypisObjekt() << endl;
 				}
 			}
+
+			delete slovensko;
+			//delete data;
+			//delete dataObyvatelia;
+			//delete dataZastavanost;
 		}	
 	}
 	//celkovy pocet riadkov
@@ -174,11 +201,43 @@ void ReadFiles::readClenenie()
 			Obec* obec = new Obec(nazov);
 			clenenie->setDataObec(obec);
 
+			Okres* okres = new Okres(nazovOkresu);
+			clenenie->setDataOkres(okres);
+
 
 			if (clenenie->getDataObec(nazov)->getNazovObce() == argNazovObce)
 			{
 				cout << clenenie->vypisObjekt() << endl;
 			}
+			if (argCisloUlohy == 12 || argCisloUlohy == 13)
+			{
+				if (clenenie->getDataObec(nazov)->getNazovObce() == argObec)
+				{
+					cout << clenenie->vypisObjekt() << endl;
+				}
+			}
+			if (argCisloUlohy == 31)
+			{
+				if (clenenie->getDataObec(nazov)->getNazovObce() == argObec)
+				{
+					cout << clenenie->vypisObjekt() << endl;
+				}
+			}
+			if (argCisloUlohy == 32)
+			{
+				if (clenenie->getDataOkres(nazovOkresu)->getNazovOkresu() == argNazovOkresu)
+				{
+					argOkres = clenenie->getNazovOkresu();
+					argObec = clenenie->getNazovObce();
+
+					//cout << clenenie->vypisObjekt() << endl;
+					this->readSlovensko();
+				}
+			}
+
+			delete clenenie;
+			//delete obec;
+			//delete okres;
 		}
 	}
 	//celkovy pocet riadkov
@@ -192,12 +251,28 @@ string ReadFiles::zistiNazovObce(string nazov)
 	argNazovObce = nazov;
 	int siz = nazov.length();
 	for (int i = 0; i < nazov.length(); i++) {
-		if (nazov[i] == '*')
+		if (nazov[i] == '_')
 		{
 			nazov[i] = ' ';
 		}
 	}
 	argNazovObce = nazov;
+	return nazov;
+}
+
+string ReadFiles::zistiNazovOkresu(string nazov)
+{
+	string a = "Okres ";
+	argNazovOkresu = nazov;
+	int siz = nazov.length();
+	for (int i = 0; i < nazov.length(); i++) {
+		if (nazov[i] == '_')
+		{
+			nazov[i] = ' ';
+		}
+	}
+	argNazovOkresu = a + nazov;
+	//cout << a + nazov << endl;
 	return nazov;
 }
 
@@ -257,4 +332,45 @@ string ReadFiles::separateObec(string obec, string name)
 
 ReadFiles::~ReadFiles()
 {
+	for (auto it = treap->begin(); it != treap->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	treap->clear();
+	delete treap;
+	//treap = nullptr;
+
+	for (auto it = addData->begin(); it != addData->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	addData->clear();
+	delete addData;
+	//addData = nullptr;
+
+	for (auto it = addDataObyvatelia->begin(); it != addDataObyvatelia->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	addDataObyvatelia->clear();
+	delete addDataObyvatelia;
+	//addDataObyvatelia = nullptr;
+
+	for (auto it = addDataZastavanost->begin(); it != addDataZastavanost->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	addDataZastavanost->clear();
+	delete addDataZastavanost;
+	//addDataZastavanost = nullptr;
+
+	for (auto it = addDataObec->begin(); it != addDataObec->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	addDataObec->clear();
+	delete addDataObec;
+	//addDataObec = nullptr;
+
+	for (auto it = addDataOkres->begin(); it != addDataOkres->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	addDataOkres->clear();
+	delete addDataOkres;
+	//addDataOkres = nullptr;
 }
