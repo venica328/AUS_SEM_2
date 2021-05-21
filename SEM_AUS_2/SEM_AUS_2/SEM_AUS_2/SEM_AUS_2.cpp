@@ -14,7 +14,12 @@ using namespace std;
 int main(char* arc, char** argv)
 {
     initHeapMonitor();
-    int x = 1, y;
+
+    SetConsoleOutputCP(1250);
+    SetConsoleCP(1250);
+    setlocale(LC_ALL, "slovak");
+
+    int x = 1, y, z;
     int min;
     int max;
     int pocetObyvatelov;
@@ -22,14 +27,12 @@ int main(char* arc, char** argv)
     string nazovObce;
     string cele;
     string nazovOkresu;
+    string nazovKraja;
 
     ReadFiles* r = new ReadFiles();    
 
     while (x != 0)
     {
-        SetConsoleOutputCP(1254);
-        SetConsoleCP(1254);
-
         cout << "\nVyber ulohu!\n"
             << "1 = Uloha1\n"
             << "2 = Uloha2\n"
@@ -103,6 +106,8 @@ int main(char* arc, char** argv)
             switch (y)
             {
             case 1:
+                r->zistiCisloUlohy(21);
+                r->readSlovensko();
                 break;
             case 2:
                 break;
@@ -115,41 +120,184 @@ int main(char* arc, char** argv)
             break;
 
         case 3:
-            cout << "Vyber blizsiu specifikaciu!" << endl;
-            cout << "1 = Zobrazenie podla typu: obec" << endl;
-            cout << "2 = Zobrazenie podla typu: okres" << endl;
-            cout << "3 = Zobrazenie podla typu: kraj" << endl;
+            cout << "Vyber typ uzemnej jednotky!" << endl;
+            cout << "1 = obec" << endl;
+            cout << "2 = okres" << endl;
+            cout << "3 = kraj" << endl;
             cin >> y;
             switch (y)
             {
             case 1:
-                r->zistiCisloUlohy(31);
-                cout << "Vybrali ste si zobrazenie obci!" << endl;
-                r->readSlovensko();
+
+                cout << "Vyber filter!" << endl;
+                cout << "1 = nazov obce" << endl;
+                cout << "2 = pocet obyvatelov" << endl;
+                cout << "3 = zastavanost" << endl;
+                cin >> z;
+                switch (z)
+                {
+                case 1:
+                    r->zistiCisloUlohy(11);
+                    cout << "Zadajte nazov obce:" << endl;
+                    cin >> nazovObce;
+                    r->zistiNazovObce(nazovObce);
+                    r->readSlovensko();
+                    r->readClenenie();
+                    break;
+
+                case 2:
+                    r->zistiCisloUlohy(12);
+                    cout << "Zadajte pocet obyvatelov v intervale!" << endl;
+                    cout << "MIN: ";
+                    cin >> min;
+                    r->zistiMIN(min);
+                    cout << "MAX: ";
+                    cin >> max;
+                    r->zistiMAX(max);
+                    r->readSlovensko();
+                    break;
+
+                case 3:
+                    r->zistiCisloUlohy(13);
+                    cout << "Zadajte aky interval zastavanosti pozadujete!" << endl;
+                    cout << "MIN: ";
+                    cin >> min;
+                    r->zistiMIN(min);
+                    cout << "MAX: ";
+                    cin >> max;
+                    r->zistiMAX(max);
+                    r->readSlovensko();
+                    break;
+                }
+                break;
+
+            case 2:
+                cout << "Vyber filter!" << endl;
+                cout << "1 = nazov obce" << endl;
+                cout << "2 = pocet obyvatelov" << endl;
+                cout << "3 = zastavanost" << endl;
+                cin >> z;
+                switch (z)
+                {
+                case 1:
+                    r->zistiCisloUlohy(321);
+                    cout << "Zadajte okres: " << endl;
+                    cin >> nazovOkresu;
+                    r->zistiNazovOkresu(nazovOkresu);
+                    cout << "Zadajte nazov obce:" << endl;
+                    cin >> nazovObce;
+                    r->zistiNazovObce(nazovObce);
+                    cout << endl;
+                    r->readClenenie();
+                    break;
+                case 2:
+                    r->zistiCisloUlohy(322);
+                    cout << "Zadajte okres: " << endl;
+                    cin >> nazovOkresu;
+                    r->zistiNazovOkresu(nazovOkresu);
+                    cout << "Zadajte pocet obyvatelov v intervale!" << endl;
+                    cout << "MIN: ";
+                    cin >> min;
+                    r->zistiMIN(min);
+                    cout << "MAX: ";
+                    cin >> max;
+                    r->zistiMAX(max);
+                    cout << endl;
+                    r->readClenenie();
+                    break;
+                case 3:
+                    r->zistiCisloUlohy(323);
+                    cout << "Zadajte okres: " << endl;
+                    cin >> nazovOkresu;
+                    r->zistiNazovOkresu(nazovOkresu);
+                    cout << "Zadajte aky interval zastavanosti pozadujete!" << endl;
+                    cout << "MIN: ";
+                    cin >> min;
+                    r->zistiMIN(min);
+                    cout << "MAX: ";
+                    cin >> max;
+                    r->zistiMAX(max);
+                    cout << endl;
+                    r->readClenenie();
+                    break;
+                }
+                break;
+
+            case 3:
+                cout << "Vyber filter!" << endl;
+                cout << "1 = nazov obce" << endl;
+                cout << "2 = pocet obyvatelov" << endl;
+                cout << "3 = zastavanost" << endl;
+                cin >> z;
+                switch (z)
+                {
+                case 1:
+                    r->zistiCisloUlohy(331);
+                    cout << "Zadajte kraj: " << endl;
+                    cin >> nazovKraja;
+                    r->zistiNazovKraja(nazovKraja);
+                    cout << "Zadajte nazov obce:" << endl;
+                    cin >> nazovObce;
+                    r->zistiNazovObce(nazovObce);
+                    cout << endl;
+                    r->readClenenie();
+                    break;
+                case 2:
+                    r->zistiCisloUlohy(332);
+                    cout << "Zadajte kraj: " << endl;
+                    cin >> nazovKraja;
+                    r->zistiNazovKraja(nazovKraja);
+                    cout << "Zadajte pocet obyvatelov v intervale!" << endl;
+                    cout << "MIN: ";
+                    cin >> min;
+                    r->zistiMIN(min);
+                    cout << "MAX: ";
+                    cin >> max;
+                    r->zistiMAX(max);
+                    cout << endl;
+                    r->readClenenie();
+                    break;
+                case 3:
+                    r->zistiCisloUlohy(333);
+                    cout << "Zadajte kraj: " << endl;
+                    cin >> nazovKraja;
+                    r->zistiNazovKraja(nazovKraja);
+                    cout << "Zadajte aky interval zastavanosti pozadujete!" << endl;
+                    cout << "MIN: ";
+                    cin >> min;
+                    r->zistiMIN(min);
+                    cout << "MAX: ";
+                    cin >> max;
+                    r->zistiMAX(max);
+                    cout << endl;
+                    r->readClenenie();
+                    break;
+                }
+                break;
+
+            }
+            break;
+
+        case 4:
+            cout << "Zoradte obce podla: " << endl;
+            cout << "1 = nazov" << endl;
+            cout << "2 = pocet obyvatelov" << endl;
+            cout << "3 = zastavanost" << endl;
+            cin >> y;
+            switch (y)
+            {
+            case 1:
                 break;
             case 2:
-                r->zistiCisloUlohy(32);
-                cout << "Vybrali ste si zobrazenie podla okresov!" << endl;
-                cout << "Zadajte okres: ";
-                cin >> nazovOkresu;
-                r->zistiNazovOkresu(nazovOkresu);
-                r->readClenenie();
                 break;
             case 3:
-                r->zistiCisloUlohy(33);
-                cout << "Vybrali ste si zobrazenie podla krajov!" << endl;
                 break;
             default:
                 cout << "Zadali ste zlu hodnotu!" << endl;
                 break;
             }
             break;
-
-        default:
-            cout << "Zadali ste zlu hodnotu!" << endl;
-            break;
         }
-
     }
     delete r;
     return 0;

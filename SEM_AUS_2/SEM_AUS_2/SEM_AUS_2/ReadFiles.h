@@ -7,6 +7,7 @@
 #include "ClenenieSR.h"
 #include "../structures/table/treap.h"
 #include "../structures/table/unsorted_sequence_table.h"
+#include "../structures/table/sorting/quick_sort.h"
 
 class ReadFiles
 {
@@ -18,6 +19,7 @@ public:
 	void readClenenie();
 	string zistiNazovObce(string nazov);
 	string zistiNazovOkresu(string nazov);
+	string zistiNazovKraja(string nazov);
 	int zistiCisloUlohy(int uloha);
 	int zistiMIN(int min);
 	int zistiMAX(int max);
@@ -31,6 +33,9 @@ public:
 	structures::Treap<int, AddDataZastavanost*>* addDataZastavanost = nullptr;
 	structures::Treap<string, Obec*>* addDataObec = nullptr;
 	structures::Treap<string, Okres*>* addDataOkres = nullptr;
+	structures::Treap<string, Kraj*>* addDataKraj = nullptr;
+	UnsortedSequenceTable<string, AddData*>* nazovTable = nullptr;
+	QuickSort<string, AddData*>* stringSort = nullptr;
 	~ReadFiles();
 };
 

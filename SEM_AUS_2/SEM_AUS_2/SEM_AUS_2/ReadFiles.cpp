@@ -11,7 +11,9 @@ using namespace structures;
 
 string argNazovObce = "";
 string argNazovOkresu = "";
+string argNazovKraja = "";
 string argOkres = "";
+string argKraj = "";
 string argObec = "";
 int argCisloUlohy;
 int argMin;
@@ -27,6 +29,9 @@ ReadFiles::ReadFiles()
 	addDataZastavanost = new Treap<int, AddDataZastavanost*>();
 	addDataObec = new Treap<string, Obec*>();
 	addDataOkres = new Treap<string, Okres*>();
+	addDataKraj = new Treap<string, Kraj*>();
+	nazovTable = new UnsortedSequenceTable<string, AddData*>;
+	stringSort = new QuickSort<string, AddData*>;
 }
 
 void ReadFiles::readSlovensko()
@@ -94,6 +99,7 @@ void ReadFiles::readSlovensko()
 			AddDataZastavanost* dataZastavanost = new AddDataZastavanost(celkovaVymera - zastavanaPlocha);
 			slovensko->setAddedDataZastavanost(dataZastavanost);
 
+
 			if (argCisloUlohy == 11)
 			{
 				if (slovensko->getAddedData(nazovObce)->getNazov() == argNazovObce)
@@ -101,6 +107,14 @@ void ReadFiles::readSlovensko()
 					cout << slovensko->vypisObjekt() << endl;
 				}
 			}
+
+			if (argCisloUlohy == 21)
+			{
+				
+				//nazovTable.clear();
+
+			}
+
 			if (argCisloUlohy == 31)
 			{
 				argObec = slovensko->getNazov();
@@ -128,11 +142,81 @@ void ReadFiles::readSlovensko()
 					this->readClenenie();
 				}
 			}
-			if (argCisloUlohy == 32)
+			if (argCisloUlohy == 321 || argCisloUlohy == 33)
 			{
 				if (slovensko->getNazov() == argObec)
 				{
 					cout << slovensko->vypisObjekt() << endl;
+				}
+			}
+
+			if (argCisloUlohy == 322)
+			{
+				if (slovensko->getNazov() == argObec)
+				{
+					int poc_Obyvatelov = pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov;
+					if (slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() <= argMax &&
+						slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() >= argMin)
+					{
+						argObec = slovensko->getNazov();
+						cout << slovensko->vypisObjekt() << endl;
+						this->zistiCisloUlohy(11111);
+						this->readClenenie();
+					}
+				}
+			}
+
+			if (argCisloUlohy == 323)
+			{
+				if (slovensko->getNazov() == argObec)
+				{
+					if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() <= argMax &&
+						slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() >= argMin)
+					{
+						argObec = slovensko->getNazov();
+						cout << slovensko->vypisObjekt() << endl;
+						this->zistiCisloUlohy(11111);
+						this->readClenenie();
+					}
+				}
+			}
+
+			if (argCisloUlohy == 331)
+			{
+				if (slovensko->getNazov() == argObec)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+				}
+			}
+
+			if (argCisloUlohy == 332)
+			{
+				if (slovensko->getNazov() == argObec)
+				{
+					int poc_Obyvatelov = pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov;
+					if (slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() <= argMax &&
+						slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() >= argMin)
+					{
+						argObec = slovensko->getNazov();
+						cout << slovensko->vypisObjekt() << endl;
+						this->zistiCisloUlohy(11111);
+						this->readClenenie();
+					}
+				}
+			}
+
+			if (argCisloUlohy == 333)
+			{
+				if (slovensko->getNazov() == argObec)
+				{
+					if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() <= argMax &&
+						slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() >= argMin)
+					{
+						argObec = slovensko->getNazov();
+						cout << slovensko->vypisObjekt() << endl;
+						this->zistiCisloUlohy(11111);
+						this->readClenenie();
+					}
 				}
 			}
 
@@ -204,33 +288,81 @@ void ReadFiles::readClenenie()
 			Okres* okres = new Okres(nazovOkresu);
 			clenenie->setDataOkres(okres);
 
+			Kraj* kraj = new Kraj(pom2);
+			clenenie->setDataKraj(kraj);
+
 
 			if (clenenie->getDataObec(nazov)->getNazovObce() == argNazovObce)
 			{
 				cout << clenenie->vypisObjekt() << endl;
 			}
-			if (argCisloUlohy == 12 || argCisloUlohy == 13)
+			if (argCisloUlohy == 12 || argCisloUlohy == 13 || argCisloUlohy == 31 || argCisloUlohy == 11111)
 			{
 				if (clenenie->getDataObec(nazov)->getNazovObce() == argObec)
 				{
 					cout << clenenie->vypisObjekt() << endl;
 				}
 			}
-			if (argCisloUlohy == 31)
+			if (argCisloUlohy == 321)
 			{
-				if (clenenie->getDataObec(nazov)->getNazovObce() == argObec)
+				if (clenenie->getDataOkres(nazovOkresu)->getNazovOkresu() == argNazovOkresu)
 				{
-					cout << clenenie->vypisObjekt() << endl;
+					argOkres = clenenie->getNazovOkresu();
+					if (clenenie->getNazovObce() == argNazovObce)
+					{
+						argObec = clenenie->getNazovObce();
+						this->readSlovensko();
+					}
 				}
 			}
-			if (argCisloUlohy == 32)
+			if (argCisloUlohy == 322)
 			{
 				if (clenenie->getDataOkres(nazovOkresu)->getNazovOkresu() == argNazovOkresu)
 				{
 					argOkres = clenenie->getNazovOkresu();
 					argObec = clenenie->getNazovObce();
+					this->readSlovensko();
+				}
+			}
+			if (argCisloUlohy == 323)
+			{
+				if (clenenie->getDataOkres(nazovOkresu)->getNazovOkresu() == argNazovOkresu)
+				{
+					argOkres = clenenie->getNazovOkresu();
+					argObec = clenenie->getNazovObce();
+					this->readSlovensko();
+				}
+			}
 
-					//cout << clenenie->vypisObjekt() << endl;
+			if (argCisloUlohy == 331)
+			{
+				if (clenenie->getDataKraj(pom2)->getNazovKraja() == argNazovKraja)
+				{
+					argKraj = clenenie->getNazovKraja();
+					if (clenenie->getNazovObce() == argNazovObce)
+					{
+						argObec = clenenie->getNazovObce();
+						this->readSlovensko();
+					}
+				}
+			}
+
+			if (argCisloUlohy == 332)
+			{
+				if (clenenie->getDataKraj(pom2)->getNazovKraja() == argNazovKraja)
+				{
+					argKraj = clenenie->getNazovKraja();
+					argObec = clenenie->getNazovObce();
+					this->readSlovensko();
+				}
+			}
+
+			if (argCisloUlohy == 333)
+			{
+				if (clenenie->getDataKraj(pom2)->getNazovKraja() == argNazovKraja)
+				{
+					argKraj = clenenie->getNazovKraja();
+					argObec = clenenie->getNazovObce();
 					this->readSlovensko();
 				}
 			}
@@ -273,6 +405,12 @@ string ReadFiles::zistiNazovOkresu(string nazov)
 	}
 	argNazovOkresu = a + nazov;
 	//cout << a + nazov << endl;
+	return nazov;
+}
+
+string ReadFiles::zistiNazovKraja(string nazov)
+{
+	argNazovKraja = nazov;
 	return nazov;
 }
 
@@ -373,4 +511,10 @@ ReadFiles::~ReadFiles()
 	addDataOkres->clear();
 	delete addDataOkres;
 	//addDataOkres = nullptr;
+
+	for (auto it = addDataKraj->begin(); it != addDataKraj->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	addDataKraj->clear();
+	delete addDataKraj;
 }
