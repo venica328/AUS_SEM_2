@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include "../structures/table/treap.h"
+#include "../structures/table/sorting/quick_sort.h"
+#include "../structures/table/unsorted_sequence_table.h"
 #include "AddData.h"
 #include "AddDataObyvatelia.h"
 #include "AddDataZastavanost.h"
@@ -18,6 +20,7 @@ public:
 	void setAddedData(AddData* data);
 	void setAddedDataPocObyvatelov(AddDataObyvatelia* pocObyvatelov);
 	void setAddedDataZastavanost(AddDataZastavanost* zastavanost);
+	void setDataToTable(UnsortedSequenceTable<int, AddDataObyvatelia*>* tableObyvatelia, AddDataObyvatelia* pocObyvatelov);
 	AddData* getAddedData(string nazov);
 	AddDataObyvatelia* getAddedDataPocObyvatelov(int pocet);
 	AddDataZastavanost* getAddedDataZastavanost(int zastavanost);

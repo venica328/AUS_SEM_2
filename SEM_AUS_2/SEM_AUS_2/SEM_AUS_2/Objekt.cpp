@@ -65,6 +65,12 @@ void Objekt::setAddedDataZastavanost(AddDataZastavanost* zastavanost)
 	objektZastavanost->insert(key, zastavanost);
 }
 
+void Objekt::setDataToTable(UnsortedSequenceTable<int, AddDataObyvatelia*>* tableObyvatelia, AddDataObyvatelia* pocObyvatelov)
+{
+	int key = pocObyvatelov->getPocetObyvatelov();
+	tableObyvatelia->insert(key, pocObyvatelov);
+}
+
 AddData* Objekt::getAddedData(string nazov)
 {
 	//nazov = setlocale(LC_ALL, "slovak");

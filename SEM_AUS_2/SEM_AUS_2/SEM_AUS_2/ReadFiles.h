@@ -23,6 +23,7 @@ public:
 	int zistiCisloUlohy(int uloha);
 	int zistiMIN(int min);
 	int zistiMAX(int max);
+	void zistiVzostupnost(int vzostupnost);
 	string separateData(string obec, string name);
 	string separateKraj(string kraj, string name);
 	string separateObec(string obec, string name);
@@ -35,7 +36,19 @@ public:
 	structures::Treap<string, Okres*>* addDataOkres = nullptr;
 	structures::Treap<string, Kraj*>* addDataKraj = nullptr;
 	UnsortedSequenceTable<string, AddData*>* nazovTable = nullptr;
+	UnsortedSequenceTable<int, AddDataObyvatelia*>* obyvateliaTable = nullptr;
 	QuickSort<string, AddData*>* stringSort = nullptr;
+	QuickSort<int, AddDataObyvatelia*>* intSort = nullptr;
+	void otocPoradie(UnsortedSequenceTable<string, Obec*> *oldTable);
+	void otocPoradieObyvatelov(UnsortedSequenceTable<int, AddDataObyvatelia*> *oldTableObyvatelia);
+	void vypisObce();
+	void vypisObyvatelov();
 	~ReadFiles();
+
+private:
+	UnsortedSequenceTable<string, Obec*>* tableObec;
+	UnsortedSequenceTable<int, AddDataObyvatelia*>* tableObyvatelia;
+	QuickSort<string, Obec*>* sortingObce;
+	QuickSort<int, AddDataObyvatelia*>* sortingObyvatelia;
 };
 

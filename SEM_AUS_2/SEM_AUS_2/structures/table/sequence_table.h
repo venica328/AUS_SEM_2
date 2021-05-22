@@ -169,6 +169,7 @@ namespace structures
 	template<typename K, typename T>
 	inline void SequenceTable<K, T>::insert(const K& key, const T& data)
 	{
+		/*
 		if (containsKey(key))
 		{
 			TableItem<K, T>* newItem = new TableItem<K, T>(key, data);
@@ -177,7 +178,14 @@ namespace structures
 		else
 		{
 			throw std::logic_error("Key already exist in table!");
-		}
+		}*/
+		/*
+		vyhodene aby bolo mozne sortovat na zaklade ucasti atd ak je vo viacerych rovnaka ucast
+		if (containsKey(key))
+		{
+			throw std::logic_error("SequenceTable<K, T>::insert: Key is already in table");
+		}*/
+		list_->add(new TableItem<K, T>(key, data));
 	}
 
 	template<typename K, typename T>

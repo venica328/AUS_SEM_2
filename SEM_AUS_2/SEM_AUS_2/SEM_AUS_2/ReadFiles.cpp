@@ -18,10 +18,15 @@ string argObec = "";
 int argCisloUlohy;
 int argMin;
 int argMax;
+int argVzostupnost;
 int argZastavanost;
 int argumentZastavanost;
+int argObyvatelia;
 
-ReadFiles::ReadFiles()
+ReadFiles::ReadFiles() : tableObec(new UnsortedSequenceTable<string, Obec*>()),
+						 sortingObce(new QuickSort<string, Obec*>()),
+						tableObyvatelia(new UnsortedSequenceTable<int, AddDataObyvatelia*>()),
+						sortingObyvatelia(new QuickSort<int, AddDataObyvatelia*>())
 {
 	treap = new Treap<string, Objekt*>();
 	addData = new Treap<string, AddData*>();
@@ -95,6 +100,7 @@ void ReadFiles::readSlovensko()
 			AddDataObyvatelia* dataObyvatelia = new AddDataObyvatelia(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
 				pocPoprodObyvatelov);
 			slovensko->setAddedDataPocObyvatelov(dataObyvatelia);
+			slovensko->setDataToTable(tableObyvatelia, dataObyvatelia);
 
 			AddDataZastavanost* dataZastavanost = new AddDataZastavanost(celkovaVymera - zastavanaPlocha);
 			slovensko->setAddedDataZastavanost(dataZastavanost);
@@ -105,15 +111,28 @@ void ReadFiles::readSlovensko()
 				if (slovensko->getAddedData(nazovObce)->getNazov() == argNazovObce)
 				{
 					cout << slovensko->vypisObjekt() << endl;
+					return;
 				}
 			}
 
 			if (argCisloUlohy == 21)
 			{
-				
-				//nazovTable.clear();
-
+				if (slovensko->getAddedData(nazovObce)->getNazov() == argObec)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+					return;
+				}
 			}
+
+			if (argCisloUlohy == 22)
+			{
+				if (slovensko->getAddedDataPocObyvatelov(pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov)->getPocetObyvatelov() == argObyvatelia)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+					return;
+				}
+			}
+
 
 			if (argCisloUlohy == 31)
 			{
@@ -221,10 +240,19 @@ void ReadFiles::readSlovensko()
 			}
 
 			delete slovensko;
-			//delete data;
-			//delete dataObyvatelia;
-			//delete dataZastavanost;
 		}	
+	}
+
+	bool zostupne = argVzostupnost == 2;
+
+	if (argCisloUlohy == 22)
+	{
+		sortingObyvatelia->sort(*tableObyvatelia);
+		if (zostupne)
+		{
+			otocPoradieObyvatelov(tableObyvatelia);
+		}
+		vypisObyvatelov();
 	}
 	//celkovy pocet riadkov
 	//std::cout << rows <<endl;
@@ -282,8 +310,11 @@ void ReadFiles::readClenenie()
 			ClenenieSR* clenenie = new ClenenieSR(nazov, nazovOkresu, pom2, nazovRepubliky);
 			//std::cout << clenenie->vypisObjekt() << endl;
 
+			bool zostupne = true;
+
 			Obec* obec = new Obec(nazov);
 			clenenie->setDataObec(obec);
+			clenenie->setDataToTable(tableObec, obec);
 
 			Okres* okres = new Okres(nazovOkresu);
 			clenenie->setDataOkres(okres);
@@ -295,13 +326,6 @@ void ReadFiles::readClenenie()
 			if (clenenie->getDataObec(nazov)->getNazovObce() == argNazovObce)
 			{
 				cout << clenenie->vypisObjekt() << endl;
-			}
-			if (argCisloUlohy == 12 || argCisloUlohy == 13 || argCisloUlohy == 31 || argCisloUlohy == 11111)
-			{
-				if (clenenie->getDataObec(nazov)->getNazovObce() == argObec)
-				{
-					cout << clenenie->vypisObjekt() << endl;
-				}
 			}
 			if (argCisloUlohy == 321)
 			{
@@ -368,12 +392,23 @@ void ReadFiles::readClenenie()
 			}
 
 			delete clenenie;
-			//delete obec;
-			//delete okres;
 		}
 	}
+
+	bool zostupne = argVzostupnost == 2;
+
+	if (argCisloUlohy == 11 || argCisloUlohy == 12 || argCisloUlohy == 13 || argCisloUlohy == 31 || argCisloUlohy == 21)
+	{
+		sortingObce->sort(*tableObec);
+		if (zostupne)
+		{
+			otocPoradie(tableObec);
+		}
+		vypisObce();
+	}
+
 	//celkovy pocet riadkov
-	//std::cout << rows << endl;
+	std::cout << rows << endl;
 
 	file.close();
 }
@@ -432,6 +467,11 @@ int ReadFiles::zistiMAX(int max)
 	return max;
 }
 
+void ReadFiles::zistiVzostupnost(int vzostupnost)
+{
+	argVzostupnost = vzostupnost;
+}
+
 string ReadFiles::separateData(string obec, string name)
 {
 	int siz = obec.length();
@@ -466,6 +506,64 @@ string ReadFiles::separateObec(string obec, string name)
 		}
 	}
 	return name;
+}
+
+void ReadFiles::otocPoradie(UnsortedSequenceTable<string, Obec*> *oldTable)
+{
+	UnsortedSequenceTable<string, Obec*> *newTable = new UnsortedSequenceTable<string, Obec*>();
+
+	for (int it = oldTable->size() - 1; it >= 0; it--)
+	{
+		//Obec* dataObec = oldTable->getItemAtIndex(it).accessData();
+		string obec = oldTable->getItemAtIndex(it).getKey();
+		newTable->insert(obec, nullptr);
+	}
+
+	oldTable->clear();
+
+	for (auto it = newTable->begin(); it != newTable->end(); it.operator++()) {
+		string obec = (*it)->getKey();
+		oldTable->insert(obec, nullptr);
+	}
+}
+
+
+void ReadFiles::otocPoradieObyvatelov(UnsortedSequenceTable<int, AddDataObyvatelia*>* oldTableObyvatelia)
+{
+	UnsortedSequenceTable<int, AddDataObyvatelia*>* newTable = new UnsortedSequenceTable<int, AddDataObyvatelia*>();
+
+	for (int it = oldTableObyvatelia->size() - 1; it >= 0; it--)
+	{
+		int obyvatelia = oldTableObyvatelia->getItemAtIndex(it).getKey();
+		newTable->insert(obyvatelia, nullptr);
+	}
+
+	oldTableObyvatelia->clear();
+
+	for (auto it = newTable->begin(); it != newTable->end(); it.operator++()) {
+		int obyvatelia = (*it)->getKey();
+		oldTableObyvatelia->insert(obyvatelia, nullptr);
+	}
+}
+
+void ReadFiles::vypisObce()
+{
+	for (TableItem<string, Obec*> *obecIterator : *tableObec)
+	{
+		cout << obecIterator->getKey() << endl;
+		argObec = obecIterator->getKey();
+		readSlovensko();
+	}
+}
+
+void ReadFiles::vypisObyvatelov()
+{
+	for (TableItem<int, AddDataObyvatelia*> *obyvateliaIterator : *tableObyvatelia)
+	{
+		cout << obyvateliaIterator->getKey() << endl;
+		argObyvatelia = obyvateliaIterator->getKey();
+		readSlovensko();
+	}
 }
 
 ReadFiles::~ReadFiles()
@@ -517,4 +615,16 @@ ReadFiles::~ReadFiles()
 	}
 	addDataKraj->clear();
 	delete addDataKraj;
+
+	for (auto it = tableObec->begin(); it != tableObec->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	tableObec->clear();
+	delete tableObec;
+
+	for (auto it = tableObyvatelia->begin(); it != tableObyvatelia->end(); it.operator++()) {
+		delete (*it)->accessData();
+	}
+	tableObyvatelia->clear();
+	delete tableObyvatelia;
 }

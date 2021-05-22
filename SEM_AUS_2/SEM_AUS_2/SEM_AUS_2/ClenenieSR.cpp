@@ -1,4 +1,8 @@
 #include "ClenenieSR.h"
+#include<iostream>
+
+using namespace std;
+
 
 ClenenieSR::ClenenieSR(string nazovObce, string nazovOkresu, string nazovKraja, string nazovRepubliky) :
 	nazovObce(nazovObce),nazovOkresu(nazovOkresu),nazovKraja(nazovKraja),nazovRepubliky(nazovRepubliky),
@@ -30,17 +34,13 @@ ClenenieSR::~ClenenieSR()
 	objektKraj->clear();
 	delete objektKraj;
 	objektKraj = nullptr;
+
 }
 
 void ClenenieSR::setDataObec(Obec* dataObec)
 {
-	QuickSort<string, Obec*> stringSort;
-	UnsortedSequenceTable<string, Obec*> nazovTable;
 	string key = dataObec->getNazovObce();
-	//key = setlocale(LC_ALL, "slovak");
 	objektObec->insert(key, dataObec);
-	nazovTable.insert(key, dataObec);
-
 }
 
 void ClenenieSR::setDataOkres(Okres* dataOkres)
@@ -56,6 +56,13 @@ void ClenenieSR::setDataKraj(Kraj* dataKraj)
 	//key = setlocale(LC_ALL, "slovak");
 	objektKraj->insert(key, dataKraj);
 }
+
+void ClenenieSR::setDataToTable(UnsortedSequenceTable<string, Obec*> *tableObec, Obec* dataObec)
+{
+	string key = dataObec->getNazovObce();
+	tableObec->insert(key, dataObec);
+}
+
 
 Obec* ClenenieSR::getDataObec(string nazov)
 {
@@ -122,3 +129,4 @@ string ClenenieSR::vypisObjekt()
 	vypisInfo << "Stat: " << getRepubliku() << endl;
 	return vypisInfo.str();
 }
+

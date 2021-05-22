@@ -21,6 +21,7 @@ public:
 	void setDataObec(Obec* dataObec);
 	void setDataOkres(Okres* dataOkres);
 	void setDataKraj(Kraj* dataKraj);
+	void setDataToTable(UnsortedSequenceTable<string, Obec*>* tableObec, Obec* dataObec);
 	Obec* getDataObec(string nazov);
 	Okres* getDataOkres(string nazov);
 	Kraj* getDataKraj(string nazov);

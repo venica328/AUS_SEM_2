@@ -106,11 +106,39 @@ int main(char* arc, char** argv)
             switch (y)
             {
             case 1:
-                r->zistiCisloUlohy(21);
-                r->readSlovensko();
-                break;
+                cout << "1 = vzostupne (od A po Z)" << endl;
+                cout << "2 = zostupne (od Z do A)" << endl;
+                cin >> x;
+                switch (x)
+                {
+                case 1:
+                case 2:
+                    r->zistiCisloUlohy(21);
+                    r->zistiVzostupnost(x);
+                    r->readClenenie();
+                    r->readSlovensko();
+                    break;
+                default:
+                    cout << "Zadali ste zlu hodnotu!" << endl;
+                    break;
+                }
+                
             case 2:
-                break;
+                cout << "1 = vzostupne (od 0 po infinity)" << endl;
+                cout << "2 = zostupne (od infinity do 0)" << endl;
+                cin >> x;
+                switch (x)
+                {
+                case 1:
+                case 2:
+                    r->zistiCisloUlohy(22);
+                    r->zistiVzostupnost(x);
+                    r->readSlovensko();
+                    break;
+                default:
+                    cout << "Zadali ste zlu hodnotu!" << endl;
+                    break;
+                }
             case 3:
                 break;
             default:
