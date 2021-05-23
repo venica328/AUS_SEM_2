@@ -37,18 +37,25 @@ public:
 	structures::Treap<string, Kraj*>* addDataKraj = nullptr;
 	UnsortedSequenceTable<string, AddData*>* nazovTable = nullptr;
 	UnsortedSequenceTable<int, AddDataObyvatelia*>* obyvateliaTable = nullptr;
+	UnsortedSequenceTable<int, AddDataZastavanost*>* zastavanostTable = nullptr;
 	QuickSort<string, AddData*>* stringSort = nullptr;
 	QuickSort<int, AddDataObyvatelia*>* intSort = nullptr;
+	QuickSort<int, AddDataZastavanost*>* intSortZastavanost = nullptr;
 	void otocPoradie(UnsortedSequenceTable<string, Obec*> *oldTable);
 	void otocPoradieObyvatelov(UnsortedSequenceTable<int, AddDataObyvatelia*> *oldTableObyvatelia);
+	void otocPoradieZastavanost(UnsortedSequenceTable<int, AddDataZastavanost*> *oldTableZastavanost);
 	void vypisObce();
 	void vypisObyvatelov();
+	void vypisZastavanost();
+	void vynuluj();
 	~ReadFiles();
 
 private:
 	UnsortedSequenceTable<string, Obec*>* tableObec;
 	UnsortedSequenceTable<int, AddDataObyvatelia*>* tableObyvatelia;
+	UnsortedSequenceTable<int, AddDataZastavanost*>* tableZastavanost;
 	QuickSort<string, Obec*>* sortingObce;
 	QuickSort<int, AddDataObyvatelia*>* sortingObyvatelia;
+	QuickSort<int, AddDataZastavanost*>* sortingZastavanost;
 };
 

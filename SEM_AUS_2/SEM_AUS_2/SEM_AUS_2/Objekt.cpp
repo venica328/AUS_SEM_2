@@ -46,7 +46,6 @@ Objekt::~Objekt()
 void Objekt::setAddedData(AddData* data)
 {
 	string key = data->getNazov();
-	//key = setlocale(LC_ALL, "slovak");
 	objektNazov->insert(key, data);
 	objektNazov->isEmpty();
 }
@@ -54,7 +53,6 @@ void Objekt::setAddedData(AddData* data)
 void Objekt::setAddedDataPocObyvatelov(AddDataObyvatelia* pocObyvatelov)
 {
 	int key = pocObyvatelov->getPocetObyvatelov();
-	//key = setlocale(LC_ALL, "slovak");
 	objektObyvatelia->insert(key, pocObyvatelov);
 }
 
@@ -71,10 +69,14 @@ void Objekt::setDataToTable(UnsortedSequenceTable<int, AddDataObyvatelia*>* tabl
 	tableObyvatelia->insert(key, pocObyvatelov);
 }
 
+void Objekt::setDataToTableZastavanost(UnsortedSequenceTable<int, AddDataZastavanost*>* tableZastavanost, AddDataZastavanost* zastavanost)
+{
+	int key = zastavanost->getZastavanost();
+	tableZastavanost->insert(key, zastavanost);
+}
+
 AddData* Objekt::getAddedData(string nazov)
 {
-	//nazov = setlocale(LC_ALL, "slovak");
-	//cout << "nazov: " << (*objekty)[nazov]->getNazov() << endl;
 	if (objektNazov->containsKey(nazov))
 	{
 		return (*objektNazov)[nazov];

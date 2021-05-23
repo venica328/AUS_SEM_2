@@ -21,6 +21,7 @@ public:
 	void setAddedDataPocObyvatelov(AddDataObyvatelia* pocObyvatelov);
 	void setAddedDataZastavanost(AddDataZastavanost* zastavanost);
 	void setDataToTable(UnsortedSequenceTable<int, AddDataObyvatelia*>* tableObyvatelia, AddDataObyvatelia* pocObyvatelov);
+	void setDataToTableZastavanost(UnsortedSequenceTable<int, AddDataZastavanost*>* tableZastavanost, AddDataZastavanost* zastavanost);
 	AddData* getAddedData(string nazov);
 	AddDataObyvatelia* getAddedDataPocObyvatelov(int pocet);
 	AddDataZastavanost* getAddedDataZastavanost(int zastavanost);

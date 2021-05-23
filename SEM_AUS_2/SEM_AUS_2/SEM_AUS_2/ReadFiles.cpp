@@ -15,6 +15,7 @@ string argNazovKraja = "";
 string argOkres = "";
 string argKraj = "";
 string argObec = "";
+bool argEscape = false;
 int argCisloUlohy;
 int argMin;
 int argMax;
@@ -26,7 +27,9 @@ int argObyvatelia;
 ReadFiles::ReadFiles() : tableObec(new UnsortedSequenceTable<string, Obec*>()),
 						 sortingObce(new QuickSort<string, Obec*>()),
 						tableObyvatelia(new UnsortedSequenceTable<int, AddDataObyvatelia*>()),
-						sortingObyvatelia(new QuickSort<int, AddDataObyvatelia*>())
+						sortingObyvatelia(new QuickSort<int, AddDataObyvatelia*>()),
+						tableZastavanost(new UnsortedSequenceTable<int, AddDataZastavanost*>()),
+						sortingZastavanost(new QuickSort<int, AddDataZastavanost*>())
 {
 	treap = new Treap<string, Objekt*>();
 	addData = new Treap<string, AddData*>();
@@ -49,6 +52,9 @@ void ReadFiles::readSlovensko()
 	string pom;
 	
 	int rows = 0;
+	int rowsTotal = count(istreambuf_iterator<char>(file), istreambuf_iterator<char>(), '\n');
+	file.clear();
+	file.seekg(0);
 
 	int pocPreprodObyvatelov;
 	int pocProduktivnychObyvatelov;
@@ -56,7 +62,7 @@ void ReadFiles::readSlovensko()
 	int celkovaVymera;
 	int zastavanaPlocha;
 	
-	while (!file.eof())
+	while (rows < rowsTotal)
 	{
 		rows++;
 		
@@ -100,50 +106,36 @@ void ReadFiles::readSlovensko()
 			AddDataObyvatelia* dataObyvatelia = new AddDataObyvatelia(pocPreprodObyvatelov + pocProduktivnychObyvatelov +
 				pocPoprodObyvatelov);
 			slovensko->setAddedDataPocObyvatelov(dataObyvatelia);
-			slovensko->setDataToTable(tableObyvatelia, dataObyvatelia);
+			if (argCisloUlohy != 422 && argCisloUlohy != 432)
+			{
+				slovensko->setDataToTable(tableObyvatelia, dataObyvatelia);
+			}
 
 			AddDataZastavanost* dataZastavanost = new AddDataZastavanost(celkovaVymera - zastavanaPlocha);
 			slovensko->setAddedDataZastavanost(dataZastavanost);
+			if (argCisloUlohy != 423 && argCisloUlohy != 433)
+			{
+				slovensko->setDataToTableZastavanost(tableZastavanost, dataZastavanost);
+			}
+			
 
-
+			if (argCisloUlohy == 10)
+			{
+				cout << slovensko->vypisObjekt() << endl;
+				argNazovObce = slovensko->getNazov();
+				this->readClenenie();
+			}
 			if (argCisloUlohy == 11)
 			{
 				if (slovensko->getAddedData(nazovObce)->getNazov() == argNazovObce)
 				{
 					cout << slovensko->vypisObjekt() << endl;
-					return;
 				}
-			}
-
-			if (argCisloUlohy == 21)
-			{
-				if (slovensko->getAddedData(nazovObce)->getNazov() == argObec)
-				{
-					cout << slovensko->vypisObjekt() << endl;
-					return;
-				}
-			}
-
-			if (argCisloUlohy == 22)
-			{
-				if (slovensko->getAddedDataPocObyvatelov(pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov)->getPocetObyvatelov() == argObyvatelia)
-				{
-					cout << slovensko->vypisObjekt() << endl;
-					return;
-				}
-			}
-
-
-			if (argCisloUlohy == 31)
-			{
-				argObec = slovensko->getNazov();
-				cout << slovensko->vypisObjekt() << endl;
-				this->readClenenie();
 			}
 			if (argCisloUlohy == 12)
 			{
 				int poc_Obyvatelov = pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov;
-				if (slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() <= argMax && 
+				if (slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() <= argMax &&
 					slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() >= argMin)
 				{
 					argObec = slovensko->getNazov();
@@ -161,6 +153,47 @@ void ReadFiles::readSlovensko()
 					this->readClenenie();
 				}
 			}
+
+			if (argCisloUlohy == 21)
+			{
+				if (slovensko->getAddedData(nazovObce)->getNazov() == argObec)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+					delete slovensko;
+					file.close();
+					return;
+				}
+			}
+
+			if (argCisloUlohy == 22 || argCisloUlohy == 422 || argCisloUlohy == 432)
+			{
+				if (slovensko->getAddedDataPocObyvatelov(pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov)->getPocetObyvatelov() == argObyvatelia)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+					delete slovensko;
+					file.close();
+					return;
+				}
+			}
+
+			if (argCisloUlohy == 23 || argCisloUlohy == 423 || argCisloUlohy == 433)
+			{
+				if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() == argZastavanost)
+				{
+					cout << slovensko->vypisObjekt() << endl;
+					delete slovensko;
+					file.close();
+					return;
+				}
+			}
+
+			if (argCisloUlohy == 31)
+			{
+				argObec = slovensko->getNazov();
+				cout << slovensko->vypisObjekt() << endl;
+				this->readClenenie();
+			}
+			
 			if (argCisloUlohy == 321 || argCisloUlohy == 33)
 			{
 				if (slovensko->getNazov() == argObec)
@@ -174,13 +207,17 @@ void ReadFiles::readSlovensko()
 				if (slovensko->getNazov() == argObec)
 				{
 					int poc_Obyvatelov = pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov;
-					if (slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() <= argMax &&
-						slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() >= argMin)
+					if (poc_Obyvatelov <= argMax && poc_Obyvatelov >= argMin)
 					{
 						argObec = slovensko->getNazov();
+						argNazovObce = slovensko->getNazov();
 						cout << slovensko->vypisObjekt() << endl;
-						this->zistiCisloUlohy(11111);
+						argEscape = true;
 						this->readClenenie();
+
+						delete slovensko;
+						file.close();
+						return;
 					}
 				}
 			}
@@ -193,9 +230,14 @@ void ReadFiles::readSlovensko()
 						slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() >= argMin)
 					{
 						argObec = slovensko->getNazov();
+						argNazovObce = slovensko->getNazov();
 						cout << slovensko->vypisObjekt() << endl;
-						this->zistiCisloUlohy(11111);
+						argEscape = true;
 						this->readClenenie();
+
+						delete slovensko;
+						file.close();
+						return;
 					}
 				}
 			}
@@ -217,9 +259,14 @@ void ReadFiles::readSlovensko()
 						slovensko->getAddedDataPocObyvatelov(poc_Obyvatelov)->getPocetObyvatelov() >= argMin)
 					{
 						argObec = slovensko->getNazov();
+						argNazovObce = slovensko->getNazov();
 						cout << slovensko->vypisObjekt() << endl;
-						this->zistiCisloUlohy(11111);
+						argEscape = true;
 						this->readClenenie();
+
+						delete slovensko;
+						file.close();
+						return;
 					}
 				}
 			}
@@ -232,10 +279,45 @@ void ReadFiles::readSlovensko()
 						slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() >= argMin)
 					{
 						argObec = slovensko->getNazov();
+						argNazovObce = slovensko->getNazov();
 						cout << slovensko->vypisObjekt() << endl;
-						this->zistiCisloUlohy(11111);
+						argEscape = true;
 						this->readClenenie();
+
+						delete slovensko;
+						file.close();
+						return;
 					}
+				}
+			}
+
+			if (argCisloUlohy == 422 || argCisloUlohy == 432)
+			{
+				if (slovensko->getNazov() == argObec)
+				{
+					int poc_Obyvatelov = pocPreprodObyvatelov + pocProduktivnychObyvatelov + pocPoprodObyvatelov;
+					if (poc_Obyvatelov <= argMax && poc_Obyvatelov >= argMin)
+					{
+						slovensko->setDataToTable(tableObyvatelia, dataObyvatelia);
+					}
+
+					delete slovensko;
+					return;
+				}
+			}
+
+			if (argCisloUlohy == 423 || argCisloUlohy == 433)
+			{
+				if (slovensko->getNazov() == argObec)
+				{
+					if (slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() <= argMax &&
+						slovensko->getAddedDataZastavanost(celkovaVymera - zastavanaPlocha)->getZastavanost() >= argMin)
+					{
+						slovensko->setDataToTableZastavanost(tableZastavanost, dataZastavanost);
+					}
+
+					delete slovensko;
+					return;
 				}
 			}
 
@@ -245,7 +327,7 @@ void ReadFiles::readSlovensko()
 
 	bool zostupne = argVzostupnost == 2;
 
-	if (argCisloUlohy == 22)
+	if (argCisloUlohy == 22 || argCisloUlohy == 432)
 	{
 		sortingObyvatelia->sort(*tableObyvatelia);
 		if (zostupne)
@@ -254,8 +336,15 @@ void ReadFiles::readSlovensko()
 		}
 		vypisObyvatelov();
 	}
-	//celkovy pocet riadkov
-	//std::cout << rows <<endl;
+	if (argCisloUlohy == 23)
+	{
+		sortingZastavanost->sort(*tableZastavanost);
+		if (zostupne)
+		{
+			otocPoradieZastavanost(tableZastavanost);
+		}
+		vypisZastavanost();
+	}
 
 	file.close();
 }
@@ -308,13 +397,15 @@ void ReadFiles::readClenenie()
 			}
 			
 			ClenenieSR* clenenie = new ClenenieSR(nazov, nazovOkresu, pom2, nazovRepubliky);
-			//std::cout << clenenie->vypisObjekt() << endl;
 
 			bool zostupne = true;
 
 			Obec* obec = new Obec(nazov);
 			clenenie->setDataObec(obec);
-			clenenie->setDataToTable(tableObec, obec);
+			if (argCisloUlohy != 421 && argCisloUlohy != 431)
+			{
+				clenenie->setDataToTable(tableObec, obec);
+			}
 
 			Okres* okres = new Okres(nazovOkresu);
 			clenenie->setDataOkres(okres);
@@ -326,7 +417,26 @@ void ReadFiles::readClenenie()
 			if (clenenie->getDataObec(nazov)->getNazovObce() == argNazovObce)
 			{
 				cout << clenenie->vypisObjekt() << endl;
+
+				if (argEscape)
+				{
+					argEscape = false;
+					delete clenenie;
+					file.close();
+					return;
+				}
 			}
+			if (argCisloUlohy == 12 || argCisloUlohy == 13)
+			{
+				if (clenenie->getDataObec(nazov)->getNazovObce() == argObec)
+				{
+					cout << clenenie->vypisObjekt() << endl;
+					delete clenenie;
+					file.close();
+					return;
+				}
+			}
+
 			if (argCisloUlohy == 321)
 			{
 				if (clenenie->getDataOkres(nazovOkresu)->getNazovOkresu() == argNazovOkresu)
@@ -339,9 +449,15 @@ void ReadFiles::readClenenie()
 					}
 				}
 			}
-			if (argCisloUlohy == 322)
+			if (argCisloUlohy == 322 || argCisloUlohy == 422 || argCisloUlohy == 423)
 			{
-				if (clenenie->getDataOkres(nazovOkresu)->getNazovOkresu() == argNazovOkresu)
+				if (argCisloUlohy == 322 && argEscape)
+				{
+					delete clenenie;
+					continue;
+				}
+
+				if (nazovOkresu == argNazovOkresu)
 				{
 					argOkres = clenenie->getNazovOkresu();
 					argObec = clenenie->getNazovObce();
@@ -350,7 +466,13 @@ void ReadFiles::readClenenie()
 			}
 			if (argCisloUlohy == 323)
 			{
-				if (clenenie->getDataOkres(nazovOkresu)->getNazovOkresu() == argNazovOkresu)
+				if (argEscape)
+				{
+					delete clenenie;
+					continue;
+				}
+
+				if (nazovOkresu == argNazovOkresu)
 				{
 					argOkres = clenenie->getNazovOkresu();
 					argObec = clenenie->getNazovObce();
@@ -371,8 +493,14 @@ void ReadFiles::readClenenie()
 				}
 			}
 
-			if (argCisloUlohy == 332)
+			if (argCisloUlohy == 332 || argCisloUlohy == 432 || argCisloUlohy == 433)
 			{
+				if (argCisloUlohy == 332 && argEscape)
+				{
+					delete clenenie;
+					continue;
+				}
+
 				if (clenenie->getDataKraj(pom2)->getNazovKraja() == argNazovKraja)
 				{
 					argKraj = clenenie->getNazovKraja();
@@ -383,11 +511,33 @@ void ReadFiles::readClenenie()
 
 			if (argCisloUlohy == 333)
 			{
+				if (argEscape)
+				{
+					delete clenenie;
+					continue;
+				}
+
 				if (clenenie->getDataKraj(pom2)->getNazovKraja() == argNazovKraja)
 				{
 					argKraj = clenenie->getNazovKraja();
 					argObec = clenenie->getNazovObce();
 					this->readSlovensko();
+				}
+			}
+
+			if (argCisloUlohy == 421)
+			{
+				if (clenenie->getDataOkres(nazovOkresu)->getNazovOkresu() == argNazovOkresu)
+				{
+					clenenie->setDataToTable(tableObec, obec);
+				}
+			}
+
+			if (argCisloUlohy == 431)
+			{
+				if (clenenie->getDataKraj(pom2)->getNazovKraja() == argNazovKraja)
+				{
+					clenenie->setDataToTable(tableObec, obec);
 				}
 			}
 
@@ -397,7 +547,7 @@ void ReadFiles::readClenenie()
 
 	bool zostupne = argVzostupnost == 2;
 
-	if (argCisloUlohy == 11 || argCisloUlohy == 12 || argCisloUlohy == 13 || argCisloUlohy == 31 || argCisloUlohy == 21)
+	if (argCisloUlohy == 31 || argCisloUlohy == 21 || argCisloUlohy == 421 || argCisloUlohy == 431)
 	{
 		sortingObce->sort(*tableObec);
 		if (zostupne)
@@ -407,8 +557,25 @@ void ReadFiles::readClenenie()
 		vypisObce();
 	}
 
-	//celkovy pocet riadkov
-	std::cout << rows << endl;
+	if (argCisloUlohy == 422 || argCisloUlohy == 432)
+	{
+		sortingObyvatelia->sort(*tableObyvatelia);
+		if (zostupne)
+		{
+			otocPoradieObyvatelov(tableObyvatelia);
+		}
+		vypisObyvatelov();
+	}
+
+	if (argCisloUlohy == 423 || argCisloUlohy == 433)
+	{
+		sortingZastavanost->sort(*tableZastavanost);
+		if (zostupne)
+		{
+			otocPoradieZastavanost(tableZastavanost);
+		}
+		vypisZastavanost();
+	}
 
 	file.close();
 }
@@ -501,7 +668,7 @@ string ReadFiles::separateObec(string obec, string name)
 	int siz = obec.length();
 	for (int i = 0; i < obec.length(); i++) {
 		if (obec[i] == '\n') {
-			name = obec.substr(i+1,siz);
+			name = obec.substr(i+1, siz);
 			obec = name;
 		}
 	}
@@ -546,12 +713,31 @@ void ReadFiles::otocPoradieObyvatelov(UnsortedSequenceTable<int, AddDataObyvatel
 	}
 }
 
+void ReadFiles::otocPoradieZastavanost(UnsortedSequenceTable<int, AddDataZastavanost*> *oldTableZastavanost)
+{
+	UnsortedSequenceTable<int, AddDataZastavanost*>* newTable = new UnsortedSequenceTable<int, AddDataZastavanost*>();
+
+	for (int it = oldTableZastavanost->size() - 1; it >= 0; it--)
+	{
+		int zastavanost = oldTableZastavanost->getItemAtIndex(it).getKey();
+		newTable->insert(zastavanost, nullptr);
+	}
+
+	oldTableZastavanost->clear();
+
+	for (auto it = newTable->begin(); it != newTable->end(); it.operator++()) {
+		int zastavanost = (*it)->getKey();
+		oldTableZastavanost->insert(zastavanost, nullptr);
+	}
+}
+
 void ReadFiles::vypisObce()
 {
 	for (TableItem<string, Obec*> *obecIterator : *tableObec)
 	{
 		cout << obecIterator->getKey() << endl;
 		argObec = obecIterator->getKey();
+		argNazovObce = obecIterator->getKey();
 		readSlovensko();
 	}
 }
@@ -564,6 +750,34 @@ void ReadFiles::vypisObyvatelov()
 		argObyvatelia = obyvateliaIterator->getKey();
 		readSlovensko();
 	}
+}
+
+void ReadFiles::vypisZastavanost()
+{
+	for (TableItem<int, AddDataZastavanost*> *zastavanostIterator : *tableZastavanost)
+	{
+		cout << zastavanostIterator->getKey() << endl;
+		argZastavanost = zastavanostIterator->getKey();
+		readSlovensko();
+	}
+}
+
+void ReadFiles::vynuluj()
+{
+	argNazovObce = "";
+	argNazovOkresu = "";
+	argNazovKraja = "";
+	argOkres = "";
+	argKraj = "";
+	argObec = "";
+	argEscape = false;
+	argCisloUlohy = 0;
+	argMin = 0;
+	argMax = 0;
+	argVzostupnost = 0;
+	argZastavanost = 0;
+	argumentZastavanost = 0;
+	argObyvatelia = 0;
 }
 
 ReadFiles::~ReadFiles()
@@ -616,15 +830,18 @@ ReadFiles::~ReadFiles()
 	addDataKraj->clear();
 	delete addDataKraj;
 
-	for (auto it = tableObec->begin(); it != tableObec->end(); it.operator++()) {
+	for (auto it = nazovTable->begin(); it != nazovTable->end(); it.operator++()) {
 		delete (*it)->accessData();
 	}
+	nazovTable->clear();
+	delete nazovTable;
+
 	tableObec->clear();
 	delete tableObec;
 
-	for (auto it = tableObyvatelia->begin(); it != tableObyvatelia->end(); it.operator++()) {
-		delete (*it)->accessData();
-	}
 	tableObyvatelia->clear();
 	delete tableObyvatelia;
+
+	tableZastavanost->clear();
+	delete tableZastavanost;
 }
